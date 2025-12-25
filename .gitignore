@@ -1,0 +1,69 @@
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.tsbuildinfo
+
+# Monorepo workspaces
+**/node_modules/
+**/dist/
+**/build/
+**/.turbo/
+**/.output/
+packages/*/node_modules/
+apps/*/node_modules/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Expo
+.expo/
+.expo-shared/
+*.expo/
+
+# Android
+android/.gradle/
+android/app/build/
+android/build/
+*.apk
+*.ap_
+*.aab
+
+# iOS
+ios/Pods/
+ios/build/
+ios/DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+!default.pbxuser
+
+# Environment files
+.env
+.env.*.local
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Web & cache
+.cache/
+.next/
+out/
+coverage/
+
+# Log files
+*.log
+
+# Misc
+.idea/
+*.sublime-workspace
+*.sublime-project
+

@@ -32,10 +32,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "ライブラリ",
+          title: "ホーム",
           tabBarIcon: ({ color, focused }) => (
             <MaterialIcons
-              name={focused ? "library-music" : "library-music"}
+              name={focused ? "home" : "home"}
               size={24}
               color={color}
             />

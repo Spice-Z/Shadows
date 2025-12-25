@@ -65,5 +65,3 @@ coverage/
 # Misc
 .idea/
 *.sublime-workspace
-*.sublime-project
-

@@ -1,0 +1,20 @@
+{
+  "name": "@shadows/backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Shadows backend API",
+  "main": "src/index.ts",
+  "scripts": {
+    "dev": "echo 'Backend dev server - to be implemented'",
+    "build": "echo 'Backend build - to be implemented'",
+    "start": "echo 'Backend start - to be implemented'",
+    "typecheck": "tsc --noEmit",
+    "lint": "echo 'Backend lint - to be implemented'"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.9.2"
+  }
+}
+

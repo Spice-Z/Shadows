@@ -4,6 +4,7 @@ import { ThemedText } from "./ThemedText";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 import { useTranslation } from "@/hooks/useTranslation";
+import { Spacer } from "./Spacer";
 
 interface StreakDisplayProps {
   days: number;
@@ -23,21 +24,22 @@ export function StreakDisplay({ days, message }: StreakDisplayProps) {
           color={Colors[colorScheme].text}
         />
         <View style={styles.streakContainer}>
-          <ThemedText size="5xl" style={styles.days}>
+          <ThemedText size="5xl" weight="bold" style={styles.days}>
             {days}
           </ThemedText>
           <ThemedText
             color={Colors[colorScheme].textSecondary}
             size="lg"
-            style={styles.label}
+            weight="bold"
           >
             {t("analysis.consecutiveDays")}
           </ThemedText>
         </View>
+        <Spacer y={4} />
         <ThemedText
           color={Colors[colorScheme].textSecondary}
           size="sm"
-          style={styles.message}
+          weight="medium"
         >
           {message ?? t("analysis.streakMessage")}
         </ThemedText>
@@ -64,12 +66,5 @@ const styles = StyleSheet.create({
   days: {
     fontWeight: "bold",
     letterSpacing: -1,
-  },
-  label: {
-    fontWeight: "bold",
-  },
-  message: {
-    fontWeight: "500",
-    marginTop: 4,
   },
 });

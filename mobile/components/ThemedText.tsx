@@ -1,11 +1,11 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
-import { type ReactNode } from "react";
 
 import { useThemeColor } from "@/hooks/use-theme-color";
+import { useTranslation } from "@/hooks/use-translation";
 
 // Font family mapping
-// Lexend: Primary font for Latin characters (English, etc.)
-// NotoSansJP: Fallback for Japanese characters (Hiragana, Katakana, Kanji)
+// Lexend: Primary font for Latin locales (English, etc.)
+// NotoSansJP: Font for Japanese locale
 const FONT_FAMILIES = {
   lexend: {
     regular: "Lexend-Regular",
@@ -21,71 +21,36 @@ const FONT_FAMILIES = {
   },
 } as const;
 
-// Regex to detect Japanese characters (Hiragana, Katakana, Kanji, and Japanese punctuation)
-const JAPANESE_REGEX = /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\u3000-\u303F]/;
-
-// Helper to check if text contains Japanese characters
-function containsJapanese(children: ReactNode): boolean {
-  if (typeof children === "string") {
-    return JAPANESE_REGEX.test(children);
-  }
-  if (typeof children === "number") {
-    return false;
-  }
-  if (Array.isArray(children)) {
-    return children.some((child) => containsJapanese(child));
-  }
-  return false;
-}
-
 export type ThemedTextProps = TextProps & {
-  lightColor?: string;
-  darkColor?: string;
-  font?: "lexend" | "noto" | "auto";
+  /** Direct color code (e.g., "#ff0000"). Overrides theme colors. */
+  color?: string;
   weight?: "regular" | "medium" | "semibold" | "bold";
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
-  variant?: "default" | "secondary" | "link";
 };
 
 export function ThemedText({
   style,
-  lightColor,
-  darkColor,
-  font = "auto",
+  color: colorProp,
   weight = "regular",
   size,
-  variant = "default",
   children,
   ...rest
 }: ThemedTextProps) {
-  const defaultColor = variant === "secondary" ? "textSecondary" : "text";
-  const color = useThemeColor(
-    { light: lightColor, dark: darkColor },
-    variant === "link" ? "primary" : defaultColor
-  );
+  const themeColor = useThemeColor({}, "text");
+  const { locale } = useTranslation();
+
+  // Use direct color prop if provided, otherwise use theme color
+  const color = colorProp ?? themeColor;
 
   // Determine which size style to use
   const sizeStyle = size ? sizeStyles[size] : undefined;
 
-  // Determine font family:
-  // - "auto": Use Lexend for Latin text, Noto Sans JP for Japanese text
-  // - "lexend": Force Lexend
-  // - "noto": Force Noto Sans JP
-  const getFontFamily = () => {
-    if (font === "auto") {
-      const hasJapanese = containsJapanese(children);
-      return hasJapanese
-        ? FONT_FAMILIES.noto[weight]
-        : FONT_FAMILIES.lexend[weight];
-    }
-    return FONT_FAMILIES[font][weight];
-  };
+  // Determine font family based on locale: Noto Sans JP for Japanese, Lexend for others
+  const fontFamily =
+    locale === "ja" ? FONT_FAMILIES.noto[weight] : FONT_FAMILIES.lexend[weight];
 
   return (
-    <Text
-      style={[{ color }, { fontFamily: getFontFamily() }, sizeStyle, style]}
-      {...rest}
-    >
+    <Text style={[{ color, fontFamily }, sizeStyle, style]} {...rest}>
       {children}
     </Text>
   );

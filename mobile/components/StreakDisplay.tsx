@@ -26,11 +26,19 @@ export function StreakDisplay({ days, message }: StreakDisplayProps) {
           <ThemedText size="5xl" style={styles.days}>
             {days}
           </ThemedText>
-          <ThemedText variant="secondary" size="lg" style={styles.label}>
+          <ThemedText
+            color={Colors[colorScheme].textSecondary}
+            size="lg"
+            style={styles.label}
+          >
             {t("analysis.consecutiveDays")}
           </ThemedText>
         </View>
-        <ThemedText variant="secondary" size="sm" style={styles.message}>
+        <ThemedText
+          color={Colors[colorScheme].textSecondary}
+          size="sm"
+          style={styles.message}
+        >
           {message ?? t("analysis.streakMessage")}
         </ThemedText>
       </View>

@@ -73,12 +73,10 @@ export function ProgressBar({
         />
       </TouchableOpacity>
       <View style={styles.timeContainer}>
-        <ThemedText type="secondary" style={styles.timeText}>
+        <ThemedText style={styles.timeText}>
           {formatTime(currentTime)}
         </ThemedText>
-        <ThemedText type="secondary" style={styles.timeText}>
-          {formatTime(totalTime)}
-        </ThemedText>
+        <ThemedText style={styles.timeText}>{formatTime(totalTime)}</ThemedText>
       </View>
     </View>
   );
@@ -109,15 +107,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     width: 12,
     height: 12,
-    borderRadius: 9999,
+    borderRadius: "100%",
     marginLeft: -6,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 4,
-    borderWidth: 4,
-    borderColor: "#ffffff",
   },
   timeContainer: {
     flexDirection: "row",
@@ -126,6 +122,5 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 12,
-    fontWeight: "500",
   },
 });

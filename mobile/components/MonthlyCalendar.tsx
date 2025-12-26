@@ -98,7 +98,7 @@ export function MonthlyCalendar({
       <View style={styles.weekdayRow}>
         {WEEKDAYS.map((day, index) => (
           <View key={`weekday-${index}`} style={styles.weekdayCell}>
-            <ThemedText variant="secondary" style={styles.weekdayText}>
+            <ThemedText color={Colors[colorScheme].textSecondary} style={styles.weekdayText}>
               {day}
             </ThemedText>
           </View>
@@ -145,7 +145,7 @@ export function MonthlyCalendar({
                   </ThemedText>
                 </ThemedView>
               ) : (
-                <ThemedText variant="secondary" style={styles.dayText}>
+                <ThemedText color={Colors[colorScheme].textSecondary} style={styles.dayText}>
                   {day.date}
                 </ThemedText>
               )}

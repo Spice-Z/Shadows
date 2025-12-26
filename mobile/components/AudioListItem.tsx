@@ -47,10 +47,9 @@ export function AudioListItem({
           ]}
         >
           <ThemedText
-            style={[
-              styles.countNumber,
-              isZeroCount && { color: Colors[colorScheme].textSecondary },
-            ]}
+            size="xl"
+            weight="bold"
+            style={isZeroCount && { color: Colors[colorScheme].textSecondary }}
           >
             {practiceCount}
           </ThemedText>
@@ -136,11 +135,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flexShrink: 0,
-  },
-  countNumber: {
-    fontSize: 18,
-    fontWeight: "bold",
-    lineHeight: 18,
   },
   countLabel: {
     fontSize: 9,

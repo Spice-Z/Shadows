@@ -18,7 +18,10 @@ export function AddNewAudio() {
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <ThemedText style={styles.title}>{t("home.addNewAudio")}</ThemedText>
-          <ThemedText variant="secondary" style={styles.description}>
+          <ThemedText
+            color={Colors[colorScheme].textSecondary}
+            style={styles.description}
+          >
             {t("home.addNewAudioDescription")}
           </ThemedText>
         </View>

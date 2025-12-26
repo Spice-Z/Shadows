@@ -49,7 +49,7 @@ export default function HomeScreen() {
               <ThemedText style={styles.sectionTitle}>
                 {t("home.library")}
               </ThemedText>
-              <ThemedText variant="secondary" style={styles.sectionCount}>
+              <ThemedText color={Colors[colorScheme].textSecondary} style={styles.sectionCount}>
                 {t("home.itemCount", { count: mockAudioList.length })}
               </ThemedText>
             </View>

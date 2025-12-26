@@ -4,8 +4,8 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 import { HapticTab } from "@/components/HapticTab";
 import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { useTranslation } from "@/hooks/use-translation";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();

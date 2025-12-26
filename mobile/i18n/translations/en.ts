@@ -44,11 +44,11 @@ export default {
   // Analysis screen
   analysis: {
     title: "Analysis",
-    consecutiveDays: "consecutive days",
+    consecutiveDays: "days",
     streakMessage: "Amazing consistency!",
     weeklyLearningTime: "Weekly Learning Time",
     total: "Total {{time}}",
-    totalLearningTime: "Total Learning Time",
+    totalLearningTime: "Total Learning",
     totalSessions: "Total Sessions",
     hours: "h",
     minutes: "m",
@@ -128,4 +128,3 @@ export default {
     },
   },
 } as const;
-

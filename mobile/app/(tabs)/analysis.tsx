@@ -15,10 +15,10 @@ import {
   mockTotalLearningTime,
   mockTotalSessions,
 } from "@/data/mock-analytics";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 import { useState } from "react";
-import { useTranslation } from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function AnalysisScreen() {
   const colorScheme = useColorScheme();
@@ -86,7 +86,6 @@ export default function AnalysisScreen() {
             <WeeklyChart data={mockWeeklyData} totalTime={mockWeeklyTotal} />
           </View>
 
-          {/* Monthly Calendar */}
           <View style={styles.section}>
             <MonthlyCalendar
               year={currentYear}
@@ -97,7 +96,6 @@ export default function AnalysisScreen() {
             />
           </View>
 
-          {/* Stat Cards */}
           <View style={styles.statsContainer}>
             <View style={styles.statCardContainer}>
               <StatCard

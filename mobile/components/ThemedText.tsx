@@ -1,7 +1,7 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
-import { useThemeColor } from "@/hooks/use-theme-color";
-import { useTranslation } from "@/hooks/use-translation";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { useTranslation } from "@/hooks/useTranslation";
 
 // Font family mapping
 // Lexend: Primary font for Latin locales (English, etc.)
@@ -39,13 +39,10 @@ export function ThemedText({
   const themeColor = useThemeColor({}, "text");
   const { locale } = useTranslation();
 
-  // Use direct color prop if provided, otherwise use theme color
   const color = colorProp ?? themeColor;
 
-  // Determine which size style to use
   const sizeStyle = size ? sizeStyles[size] : undefined;
 
-  // Determine font family based on locale: Noto Sans JP for Japanese, Lexend for others
   const fontFamily =
     locale === "ja" ? FONT_FAMILIES.noto[weight] : FONT_FAMILIES.lexend[weight];
 
@@ -59,38 +56,38 @@ export function ThemedText({
 const sizeStyles = StyleSheet.create({
   xs: {
     fontSize: 10,
-    lineHeight: 18,
+    lineHeight: 14,
   },
   sm: {
     fontSize: 12,
-    lineHeight: 20,
+    lineHeight: 16,
   },
   base: {
     fontSize: 16,
-    lineHeight: 28,
+    lineHeight: 18,
   },
   lg: {
     fontSize: 18,
-    lineHeight: 28,
+    lineHeight: 22,
   },
   xl: {
     fontSize: 20,
-    lineHeight: 32,
+    lineHeight: 26,
   },
   "2xl": {
     fontSize: 24,
-    lineHeight: 36,
+    lineHeight: 30,
   },
   "3xl": {
     fontSize: 32,
-    lineHeight: 44,
+    lineHeight: 38,
   },
   "4xl": {
     fontSize: 40,
-    lineHeight: 52,
+    lineHeight: 46,
   },
   "5xl": {
     fontSize: 48,
-    lineHeight: 60,
+    lineHeight: 54,
   },
 });

@@ -1,7 +1,7 @@
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { ThemedText } from "./ThemedText";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 
 interface ProgressBarProps {

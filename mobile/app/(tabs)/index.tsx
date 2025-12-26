@@ -7,9 +7,9 @@ import { StreakTag } from "@/components/StreakTag";
 import { AddNewAudio } from "@/components/AddNewAudio";
 import { AudioListItem } from "@/components/AudioListItem";
 import { mockAudioList, mockStreakCount } from "@/data/mock-audio";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
-import { useTranslation } from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -49,7 +49,10 @@ export default function HomeScreen() {
               <ThemedText style={styles.sectionTitle}>
                 {t("home.library")}
               </ThemedText>
-              <ThemedText color={Colors[colorScheme].textSecondary} style={styles.sectionCount}>
+              <ThemedText
+                color={Colors[colorScheme].textSecondary}
+                style={styles.sectionCount}
+              >
                 {t("home.itemCount", { count: mockAudioList.length })}
               </ThemedText>
             </View>

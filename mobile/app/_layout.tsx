@@ -23,8 +23,8 @@ import {
   NotoSansJP_700Bold,
 } from "@expo-google-fonts/noto-sans-jp";
 
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { ThemeProvider } from "@/contexts/theme-context";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
@@ -70,10 +70,7 @@ function RootLayoutContent() {
     >
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="study/[id]"
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="study/[id]" options={{ headerShown: false }} />
         <Stack.Screen
           name="modal"
           options={{ presentation: "modal", title: "Modal" }}

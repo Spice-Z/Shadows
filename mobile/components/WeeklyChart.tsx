@@ -1,9 +1,10 @@
 import { StyleSheet, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
-import { useTranslation } from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/useTranslation";
+import { Spacer } from "./Spacer";
 
 export interface WeeklyData {
   day: string;
@@ -36,7 +37,7 @@ export function WeeklyChart({ data, totalTime }: WeeklyChartProps) {
       style={[styles.container, { borderColor: Colors[colorScheme].border }]}
     >
       <View style={styles.header}>
-        <ThemedText style={styles.title}>
+        <ThemedText size="base" weight="bold">
           {t("analysis.weeklyLearningTime")}
         </ThemedText>
         <ThemedView
@@ -49,17 +50,15 @@ export function WeeklyChart({ data, totalTime }: WeeklyChartProps) {
           ]}
         >
           <ThemedText
-            style={[
-              styles.totalText,
-              {
-                color: Colors[colorScheme].badgeText,
-              },
-            ]}
+            color={Colors[colorScheme].badgeText}
+            size="sm"
+            weight="medium"
           >
             {t("analysis.total", { time: totalTime })}
           </ThemedText>
         </ThemedView>
       </View>
+      <Spacer y={8} />
       <View style={styles.chartContainer}>
         {DAYS.map((day, index) => {
           const dayData = data[index];
@@ -92,7 +91,6 @@ export function WeeklyChart({ data, totalTime }: WeeklyChartProps) {
                 )}
               </View>
               <ThemedText
-                type="secondary"
                 style={[
                   styles.dayLabel,
                   isEmpty && { color: Colors[colorScheme].textSecondary },
@@ -127,6 +125,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 24,
+    gap: 8,
   },
   title: {
     fontSize: 16,

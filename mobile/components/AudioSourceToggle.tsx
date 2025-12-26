@@ -1,18 +1,15 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "./ThemedText";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
-import { useTranslation } from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface AudioSourceToggleProps {
   value: "model" | "recording";
   onChange: (value: "model" | "recording") => void;
 }
 
-export function AudioSourceToggle({
-  value,
-  onChange,
-}: AudioSourceToggleProps) {
+export function AudioSourceToggle({ value, onChange }: AudioSourceToggleProps) {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
 
@@ -109,4 +106,3 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-

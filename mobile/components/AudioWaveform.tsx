@@ -1,5 +1,5 @@
 import { StyleSheet, View } from "react-native";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 
 interface AudioWaveformProps {
@@ -8,7 +8,9 @@ interface AudioWaveformProps {
 }
 
 // Mock waveform data - in real app, this would come from audio analysis
-const WAVEFORM_HEIGHTS = [24, 32, 48, 32, 56, 80, 40, 64, 96, 48, 56, 32, 20, 36, 48, 24, 16];
+const WAVEFORM_HEIGHTS = [
+  24, 32, 48, 32, 56, 80, 40, 64, 96, 48, 56, 32, 20, 36, 48, 24, 16,
+];
 
 export function AudioWaveform({ currentTime, totalTime }: AudioWaveformProps) {
   const colorScheme = useColorScheme();
@@ -53,4 +55,3 @@ const styles = StyleSheet.create({
     minHeight: 4,
   },
 });
-

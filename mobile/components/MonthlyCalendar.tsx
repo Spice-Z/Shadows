@@ -2,9 +2,9 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
-import { useTranslation } from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export interface CalendarDay {
   date: number;
@@ -68,7 +68,9 @@ export function MonthlyCalendar({
       style={[styles.container, { borderColor: Colors[colorScheme].border }]}
     >
       <View style={styles.header}>
-        <ThemedText style={styles.title}>{monthLabel}</ThemedText>
+        <ThemedText size="base" weight="bold">
+          {monthLabel}
+        </ThemedText>
         <View style={styles.navigation}>
           <TouchableOpacity
             style={styles.navButton}
@@ -98,7 +100,10 @@ export function MonthlyCalendar({
       <View style={styles.weekdayRow}>
         {WEEKDAYS.map((day, index) => (
           <View key={`weekday-${index}`} style={styles.weekdayCell}>
-            <ThemedText color={Colors[colorScheme].textSecondary} style={styles.weekdayText}>
+            <ThemedText
+              color={Colors[colorScheme].textSecondary}
+              style={styles.weekdayText}
+            >
               {day}
             </ThemedText>
           </View>
@@ -145,7 +150,10 @@ export function MonthlyCalendar({
                   </ThemedText>
                 </ThemedView>
               ) : (
-                <ThemedText color={Colors[colorScheme].textSecondary} style={styles.dayText}>
+                <ThemedText
+                  color={Colors[colorScheme].textSecondary}
+                  style={styles.dayText}
+                >
                   {day.date}
                 </ThemedText>
               )}
@@ -176,10 +184,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     marginBottom: 16,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: "bold",
   },
   navigation: {
     flexDirection: "row",

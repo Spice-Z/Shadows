@@ -5,7 +5,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState, useMemo } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 import { AudioSourceToggle } from "@/components/AudioSourceToggle";
 import { AudioWaveform } from "@/components/AudioWaveform";
@@ -42,7 +42,6 @@ export default function StudyScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        {/* Header */}
         <ThemedView
           style={[
             styles.header,
@@ -113,7 +112,6 @@ export default function StudyScreen() {
             />
           </View>
 
-          {/* Settings Button */}
           <View style={styles.settingsContainer}>
             <TouchableOpacity
               style={styles.settingsButton}

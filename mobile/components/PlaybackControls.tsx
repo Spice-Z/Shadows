@@ -1,7 +1,7 @@
 import { StyleSheet, View, TouchableOpacity } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ThemedText } from "./ThemedText";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 
 interface PlaybackControlsProps {
@@ -48,7 +48,9 @@ export function PlaybackControls({
         onPress={cycleSpeed}
         activeOpacity={0.7}
       >
-        <ThemedText style={styles.speedText}>{playbackSpeed.toFixed(1)}x</ThemedText>
+        <ThemedText style={styles.speedText}>
+          {playbackSpeed.toFixed(1)}x
+        </ThemedText>
       </TouchableOpacity>
 
       {/* Skip Backward */}
@@ -119,7 +121,11 @@ export function PlaybackControls({
         <MaterialIcons
           name="repeat"
           size={24}
-          color={isRepeat ? Colors[colorScheme].text : Colors[colorScheme].textSecondary}
+          color={
+            isRepeat
+              ? Colors[colorScheme].text
+              : Colors[colorScheme].textSecondary
+          }
         />
       </TouchableOpacity>
     </View>
@@ -171,4 +177,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-

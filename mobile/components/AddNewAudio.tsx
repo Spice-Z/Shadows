@@ -2,9 +2,9 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
-import { useTranslation } from "@/hooks/use-translation";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function AddNewAudio() {
   const colorScheme = useColorScheme();
@@ -17,7 +17,9 @@ export function AddNewAudio() {
     >
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <ThemedText style={styles.title}>{t("home.addNewAudio")}</ThemedText>
+          <ThemedText size="base" weight="bold">
+            {t("home.addNewAudio")}
+          </ThemedText>
           <ThemedText
             color={Colors[colorScheme].textSecondary}
             style={styles.description}

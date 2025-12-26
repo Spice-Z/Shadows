@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 
 interface StatCardProps {
@@ -30,7 +30,7 @@ export function StatCard({
       style={[styles.container, { borderColor: Colors[colorScheme].border }]}
     >
       <View style={styles.header}>
-        <ThemedText type="secondary" style={styles.label}>
+        <ThemedText size="sm" weight="bold">
           {label}
         </ThemedText>
         <MaterialIcons
@@ -42,20 +42,14 @@ export function StatCard({
       <View style={styles.valueContainer}>
         <View style={styles.valueRow}>
           <ThemedText style={styles.value}>{value}</ThemedText>
-          {unit && (
-            <ThemedText type="secondary" style={styles.unit}>
-              {unit}
-            </ThemedText>
-          )}
+          {unit && <ThemedText style={styles.unit}>{unit}</ThemedText>}
           {secondaryValue && (
             <>
               <ThemedText style={[styles.value, styles.secondaryValue]}>
                 {secondaryValue}
               </ThemedText>
               {secondaryUnit && (
-                <ThemedText type="secondary" style={styles.unit}>
-                  {secondaryUnit}
-                </ThemedText>
+                <ThemedText style={styles.unit}>{secondaryUnit}</ThemedText>
               )}
             </>
           )}
@@ -86,10 +80,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "flex-start",
     justifyContent: "space-between",
-  },
-  label: {
-    fontSize: 12,
-    fontWeight: "bold",
   },
   valueContainer: {
     flexDirection: "row",

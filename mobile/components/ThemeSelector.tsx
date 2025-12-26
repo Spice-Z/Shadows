@@ -1,10 +1,10 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
-import { useTheme } from "@/contexts/theme-context";
+import { useTheme } from "@/contexts/ThemeContext";
 import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
-import { useTranslation } from "@/hooks/use-translation";
+import { useColorScheme } from "@/hooks/useColorScheme";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export function ThemeSelector() {
   const { colorScheme, setColorScheme } = useTheme();

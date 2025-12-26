@@ -2,7 +2,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 
 export type AudioSourceType = "import" | "recording";
@@ -65,7 +65,7 @@ export function AudioListItem({
         </ThemedView>
 
         <View style={styles.textContainer}>
-          <ThemedText style={styles.title} numberOfLines={1}>
+          <ThemedText size="base" weight="bold" numberOfLines={1}>
             {title}
           </ThemedText>
           <View style={styles.metadata}>
@@ -81,17 +81,7 @@ export function AudioListItem({
                 },
               ]}
             >
-              <ThemedText
-                style={[
-                  styles.sourceBadgeText,
-                  {
-                    color:
-                      sourceType === "recording"
-                        ? Colors[colorScheme].text
-                        : Colors[colorScheme].badgeText,
-                  },
-                ]}
-              >
+              <ThemedText size="sm" weight="medium">
                 {sourceType === "recording" ? "録音" : "インポート"}
               </ThemedText>
             </ThemedView>
@@ -146,11 +136,6 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 0,
     gap: 4,
-  },
-  title: {
-    fontSize: 16,
-    fontWeight: "600",
-    lineHeight: 20,
   },
   metadata: {
     flexDirection: "row",

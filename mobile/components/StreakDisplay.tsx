@@ -3,17 +3,16 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { ThemedText } from "./ThemedText";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
+import { useTranslation } from "@/hooks/use-translation";
 
 interface StreakDisplayProps {
   days: number;
   message?: string;
 }
 
-export function StreakDisplay({
-  days,
-  message = "素晴らしい継続力です！",
-}: StreakDisplayProps) {
+export function StreakDisplay({ days, message }: StreakDisplayProps) {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
@@ -27,12 +26,12 @@ export function StreakDisplay({
           <ThemedText size="5xl" style={styles.days}>
             {days}
           </ThemedText>
-          <ThemedText type="secondary" size="lg" style={styles.label}>
-            日連続
+          <ThemedText variant="secondary" size="lg" style={styles.label}>
+            {t("analysis.consecutiveDays")}
           </ThemedText>
         </View>
-        <ThemedText type="secondary" size="sm" style={styles.message}>
-          {message}
+        <ThemedText variant="secondary" size="sm" style={styles.message}>
+          {message ?? t("analysis.streakMessage")}
         </ThemedText>
       </View>
     </View>

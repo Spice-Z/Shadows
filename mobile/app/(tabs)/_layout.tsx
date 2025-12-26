@@ -5,9 +5,11 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { HapticTab } from "@/components/HapticTab";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
 
   return (
     <Tabs
@@ -32,7 +34,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "ホーム",
+          title: t("tabs.home"),
           tabBarIcon: ({ color, focused }) => (
             <MaterialIcons
               name={focused ? "home" : "home"}
@@ -45,7 +47,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="analysis"
         options={{
-          title: "分析",
+          title: t("tabs.analysis"),
           tabBarIcon: ({ color }) => (
             <MaterialIcons name="bar-chart" size={24} color={color} />
           ),

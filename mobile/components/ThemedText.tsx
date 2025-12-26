@@ -1,128 +1,131 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
+import { type ReactNode } from "react";
 
 import { useThemeColor } from "@/hooks/use-theme-color";
-import { Colors } from "@/constants/theme";
-import { useColorScheme } from "@/hooks/use-color-scheme";
+
+// Font family mapping
+// Lexend: Primary font for Latin characters (English, etc.)
+// NotoSansJP: Fallback for Japanese characters (Hiragana, Katakana, Kanji)
+const FONT_FAMILIES = {
+  lexend: {
+    regular: "Lexend-Regular",
+    medium: "Lexend-Medium",
+    semibold: "Lexend-SemiBold",
+    bold: "Lexend-Bold",
+  },
+  noto: {
+    regular: "NotoSansJP-Regular",
+    medium: "NotoSansJP-Medium",
+    semibold: "NotoSansJP-SemiBold",
+    bold: "NotoSansJP-Bold",
+  },
+} as const;
+
+// Regex to detect Japanese characters (Hiragana, Katakana, Kanji, and Japanese punctuation)
+const JAPANESE_REGEX = /[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF\u3000-\u303F]/;
+
+// Helper to check if text contains Japanese characters
+function containsJapanese(children: ReactNode): boolean {
+  if (typeof children === "string") {
+    return JAPANESE_REGEX.test(children);
+  }
+  if (typeof children === "number") {
+    return false;
+  }
+  if (Array.isArray(children)) {
+    return children.some((child) => containsJapanese(child));
+  }
+  return false;
+}
 
 export type ThemedTextProps = TextProps & {
   lightColor?: string;
   darkColor?: string;
-  type?:
-    | "default"
-    | "title"
-    | "defaultSemiBold"
-    | "subtitle"
-    | "link"
-    | "secondary";
+  font?: "lexend" | "noto" | "auto";
+  weight?: "regular" | "medium" | "semibold" | "bold";
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
+  variant?: "default" | "secondary" | "link";
 };
 
 export function ThemedText({
   style,
   lightColor,
   darkColor,
-  type = "default",
+  font = "auto",
+  weight = "regular",
   size,
+  variant = "default",
+  children,
   ...rest
 }: ThemedTextProps) {
-  const colorScheme = useColorScheme();
-  const defaultColor = type === "secondary" ? "textSecondary" : "text";
+  const defaultColor = variant === "secondary" ? "textSecondary" : "text";
   const color = useThemeColor(
     { light: lightColor, dark: darkColor },
-    defaultColor
+    variant === "link" ? "primary" : defaultColor
   );
 
   // Determine which size style to use
   const sizeStyle = size ? sizeStyles[size] : undefined;
 
-  // Type styles take precedence for backward compatibility
-  const typeStyle =
-    type === "default"
-      ? styles.default
-      : type === "title"
-      ? styles.title
-      : type === "defaultSemiBold"
-      ? styles.defaultSemiBold
-      : type === "subtitle"
-      ? styles.subtitle
-      : type === "link"
-      ? styles.link
-      : undefined;
+  // Determine font family:
+  // - "auto": Use Lexend for Latin text, Noto Sans JP for Japanese text
+  // - "lexend": Force Lexend
+  // - "noto": Force Noto Sans JP
+  const getFontFamily = () => {
+    if (font === "auto") {
+      const hasJapanese = containsJapanese(children);
+      return hasJapanese
+        ? FONT_FAMILIES.noto[weight]
+        : FONT_FAMILIES.lexend[weight];
+    }
+    return FONT_FAMILIES[font][weight];
+  };
 
   return (
     <Text
-      style={[
-        { color },
-        typeStyle,
-        sizeStyle,
-        type === "link" ? { color: Colors[colorScheme].primary } : undefined,
-        style,
-      ]}
+      style={[{ color }, { fontFamily: getFontFamily() }, sizeStyle, style]}
       {...rest}
-    />
+    >
+      {children}
+    </Text>
   );
 }
-
-const styles = StyleSheet.create({
-  default: {
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  defaultSemiBold: {
-    fontSize: 16,
-    lineHeight: 24,
-    fontWeight: "600",
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: "bold",
-    lineHeight: 32,
-  },
-  subtitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  link: {
-    lineHeight: 30,
-    fontSize: 16,
-  },
-});
 
 const sizeStyles = StyleSheet.create({
   xs: {
     fontSize: 10,
-    lineHeight: 14,
+    lineHeight: 18,
   },
   sm: {
     fontSize: 12,
-    lineHeight: 16,
+    lineHeight: 20,
   },
   base: {
     fontSize: 16,
-    lineHeight: 24,
+    lineHeight: 28,
   },
   lg: {
     fontSize: 18,
-    lineHeight: 24,
+    lineHeight: 28,
   },
   xl: {
     fontSize: 20,
-    lineHeight: 28,
+    lineHeight: 32,
   },
   "2xl": {
     fontSize: 24,
-    lineHeight: 32,
+    lineHeight: 36,
   },
   "3xl": {
     fontSize: 32,
-    lineHeight: 40,
+    lineHeight: 44,
   },
   "4xl": {
     fontSize: 40,
-    lineHeight: 48,
+    lineHeight: 52,
   },
   "5xl": {
     fontSize: 48,
-    lineHeight: 56,
+    lineHeight: 60,
   },
 });

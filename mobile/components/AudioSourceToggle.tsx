@@ -2,6 +2,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { ThemedText } from "./ThemedText";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
+import { useTranslation } from "@/hooks/use-translation";
 
 interface AudioSourceToggleProps {
   value: "model" | "recording";
@@ -13,6 +14,7 @@ export function AudioSourceToggle({
   onChange,
 }: AudioSourceToggleProps) {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
 
   return (
     <View
@@ -47,7 +49,7 @@ export function AudioSourceToggle({
             },
           ]}
         >
-          Model Audio
+          {t("study.modelAudio")}
         </ThemedText>
       </TouchableOpacity>
       <TouchableOpacity
@@ -74,7 +76,7 @@ export function AudioSourceToggle({
             },
           ]}
         >
-          My Recording
+          {t("study.myRecording")}
         </ThemedText>
       </TouchableOpacity>
     </View>

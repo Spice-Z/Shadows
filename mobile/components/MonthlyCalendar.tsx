@@ -4,6 +4,7 @@ import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
+import { useTranslation } from "@/hooks/use-translation";
 
 export interface CalendarDay {
   date: number;
@@ -20,7 +21,20 @@ interface MonthlyCalendarProps {
   onNextMonth?: () => void;
 }
 
-const WEEKDAYS = ["日", "月", "火", "水", "木", "金", "土"];
+const MONTH_KEYS = [
+  "calendar.months.january",
+  "calendar.months.february",
+  "calendar.months.march",
+  "calendar.months.april",
+  "calendar.months.may",
+  "calendar.months.june",
+  "calendar.months.july",
+  "calendar.months.august",
+  "calendar.months.september",
+  "calendar.months.october",
+  "calendar.months.november",
+  "calendar.months.december",
+];
 
 export function MonthlyCalendar({
   year,
@@ -30,7 +44,23 @@ export function MonthlyCalendar({
   onNextMonth,
 }: MonthlyCalendarProps) {
   const colorScheme = useColorScheme();
-  const monthLabel = `${year}年 ${month}月`;
+  const { t, locale } = useTranslation();
+
+  const WEEKDAYS = [
+    t("calendar.weekdays.sun"),
+    t("calendar.weekdays.mon"),
+    t("calendar.weekdays.tue"),
+    t("calendar.weekdays.wed"),
+    t("calendar.weekdays.thu"),
+    t("calendar.weekdays.fri"),
+    t("calendar.weekdays.sat"),
+  ];
+
+  // Format month label based on locale
+  const monthLabel =
+    locale === "ja"
+      ? `${year}年 ${month}月`
+      : `${t(MONTH_KEYS[month - 1])} ${year}`;
 
   return (
     <ThemedView
@@ -66,9 +96,9 @@ export function MonthlyCalendar({
       </View>
 
       <View style={styles.weekdayRow}>
-        {WEEKDAYS.map((day) => (
-          <View key={day} style={styles.weekdayCell}>
-            <ThemedText type="secondary" style={styles.weekdayText}>
+        {WEEKDAYS.map((day, index) => (
+          <View key={`weekday-${index}`} style={styles.weekdayCell}>
+            <ThemedText variant="secondary" style={styles.weekdayText}>
               {day}
             </ThemedText>
           </View>
@@ -115,7 +145,7 @@ export function MonthlyCalendar({
                   </ThemedText>
                 </ThemedView>
               ) : (
-                <ThemedText type="secondary" style={styles.dayText}>
+                <ThemedText variant="secondary" style={styles.dayText}>
                   {day.date}
                 </ThemedText>
               )}

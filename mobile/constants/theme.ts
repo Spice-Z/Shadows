@@ -113,10 +113,18 @@ export const Colors = {
   },
 };
 
+// Font family configuration
+// Uses Lexend for Latin characters and Noto Sans JP for Japanese characters
 export const Fonts = Platform.select({
   ios: {
-    /** iOS `UIFontDescriptorSystemDesignDefault` */
-    sans: "system-ui",
+    /** Primary font stack: Lexend, Noto Sans JP, system fallback */
+    sans: "Lexend-Regular, NotoSansJP-Regular, system-ui",
+    /** Medium weight */
+    sansMedium: "Lexend-Medium, NotoSansJP-Medium, system-ui",
+    /** Semi-bold weight */
+    sansSemiBold: "Lexend-SemiBold, NotoSansJP-Medium, system-ui",
+    /** Bold weight */
+    sansBold: "Lexend-Bold, NotoSansJP-Bold, system-ui",
     /** iOS `UIFontDescriptorSystemDesignSerif` */
     serif: "ui-serif",
     /** iOS `UIFontDescriptorSystemDesignRounded` */
@@ -125,13 +133,27 @@ export const Fonts = Platform.select({
     mono: "ui-monospace",
   },
   default: {
-    sans: "normal",
+    /** Primary font stack: Lexend, Noto Sans JP, system fallback */
+    sans: "Lexend-Regular, NotoSansJP-Regular, sans-serif",
+    /** Medium weight */
+    sansMedium: "Lexend-Medium, NotoSansJP-Medium, sans-serif",
+    /** Semi-bold weight */
+    sansSemiBold: "Lexend-SemiBold, NotoSansJP-Medium, sans-serif",
+    /** Bold weight */
+    sansBold: "Lexend-Bold, NotoSansJP-Bold, sans-serif",
     serif: "serif",
     rounded: "normal",
     mono: "monospace",
   },
   web: {
-    sans: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    /** Primary font stack: Lexend, Noto Sans JP, system fallback */
+    sans: "'Lexend', 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    /** Medium weight */
+    sansMedium: "'Lexend', 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    /** Semi-bold weight */
+    sansSemiBold: "'Lexend', 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+    /** Bold weight */
+    sansBold: "'Lexend', 'Noto Sans JP', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
     serif: "Georgia, 'Times New Roman', serif",
     rounded:
       "'SF Pro Rounded', 'Hiragino Maru Gothic ProN', Meiryo, 'MS PGothic', sans-serif",

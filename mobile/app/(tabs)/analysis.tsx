@@ -9,7 +9,6 @@ import { MonthlyCalendar } from "@/components/MonthlyCalendar";
 import { StatCard } from "@/components/StatCard";
 import {
   mockStreakDays,
-  mockStreakMessage,
   mockWeeklyData,
   mockWeeklyTotal,
   generateCalendarDays,
@@ -19,9 +18,11 @@ import {
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
 import { useState } from "react";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function AnalysisScreen() {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
   const [currentYear, setCurrentYear] = useState(2023);
   const [currentMonth, setCurrentMonth] = useState(10);
 
@@ -56,7 +57,9 @@ export default function AnalysisScreen() {
             },
           ]}
         >
-          <ThemedText style={styles.headerTitle}>分析</ThemedText>
+          <ThemedText style={styles.headerTitle}>
+            {t("analysis.title")}
+          </ThemedText>
           <TouchableOpacity
             style={styles.settingsButton}
             hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -74,7 +77,10 @@ export default function AnalysisScreen() {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          <StreakDisplay days={mockStreakDays} message={mockStreakMessage} />
+          <StreakDisplay
+            days={mockStreakDays}
+            message={t("analysis.streakMessage")}
+          />
 
           <View style={styles.section}>
             <WeeklyChart data={mockWeeklyData} totalTime={mockWeeklyTotal} />
@@ -95,19 +101,19 @@ export default function AnalysisScreen() {
           <View style={styles.statsContainer}>
             <View style={styles.statCardContainer}>
               <StatCard
-                label="総合学習時間"
+                label={t("analysis.totalLearningTime")}
                 value={mockTotalLearningTime.hours.toString()}
-                unit="h"
+                unit={t("analysis.hours")}
                 secondaryValue={mockTotalLearningTime.minutes.toString()}
-                secondaryUnit="m"
+                secondaryUnit={t("analysis.minutes")}
                 icon="schedule"
               />
             </View>
             <View style={styles.statCardContainer}>
               <StatCard
-                label="総合学習回数"
+                label={t("analysis.totalSessions")}
                 value={mockTotalSessions.toString()}
-                unit="回"
+                unit={t("analysis.sessions")}
                 icon="repeat"
               />
             </View>

@@ -55,7 +55,7 @@ export function AudioListItem({
             {practiceCount}
           </ThemedText>
           <ThemedText
-            type="secondary"
+            weight="bold"
             style={[
               styles.countLabel,
               isZeroCount && { color: Colors[colorScheme].textSecondary },
@@ -96,7 +96,7 @@ export function AudioListItem({
                 {sourceType === "recording" ? "録音" : "インポート"}
               </ThemedText>
             </ThemedView>
-            <ThemedText type="secondary" style={styles.metadataText}>
+            <ThemedText style={styles.metadataText}>
               {duration} • {lastPlayed}
             </ThemedText>
           </View>

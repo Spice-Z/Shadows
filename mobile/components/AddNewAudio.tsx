@@ -4,9 +4,11 @@ import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
+import { useTranslation } from "@/hooks/use-translation";
 
 export function AddNewAudio() {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
 
   return (
     <ThemedView
@@ -15,9 +17,9 @@ export function AddNewAudio() {
     >
       <View style={styles.header}>
         <View style={styles.headerContent}>
-          <ThemedText style={styles.title}>新しい音源を追加</ThemedText>
-          <ThemedText type="secondary" style={styles.description}>
-            録音またはファイルをインポートして学習を開始
+          <ThemedText style={styles.title}>{t("home.addNewAudio")}</ThemedText>
+          <ThemedText variant="secondary" style={styles.description}>
+            {t("home.addNewAudioDescription")}
           </ThemedText>
         </View>
         <MaterialIcons
@@ -48,7 +50,7 @@ export function AddNewAudio() {
               { color: Colors[colorScheme].buttonPrimaryText },
             ]}
           >
-            録音
+            {t("home.record")}
           </ThemedText>
         </TouchableOpacity>
         <TouchableOpacity
@@ -66,7 +68,7 @@ export function AddNewAudio() {
             size={18}
             color={Colors[colorScheme].text}
           />
-          <ThemedText style={styles.buttonText}>インポート</ThemedText>
+          <ThemedText style={styles.buttonText}>{t("home.import")}</ThemedText>
         </TouchableOpacity>
       </View>
     </ThemedView>

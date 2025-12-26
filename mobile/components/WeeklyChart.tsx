@@ -3,6 +3,7 @@ import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
+import { useTranslation } from "@/hooks/use-translation";
 
 export interface WeeklyData {
   day: string;
@@ -14,11 +15,20 @@ interface WeeklyChartProps {
   totalTime: string;
 }
 
-const DAYS = ["月", "火", "水", "木", "金", "土", "日"];
-
 export function WeeklyChart({ data, totalTime }: WeeklyChartProps) {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
   const maxHeight = 160;
+
+  const DAYS = [
+    t("calendar.weekdays.mon"),
+    t("calendar.weekdays.tue"),
+    t("calendar.weekdays.wed"),
+    t("calendar.weekdays.thu"),
+    t("calendar.weekdays.fri"),
+    t("calendar.weekdays.sat"),
+    t("calendar.weekdays.sun"),
+  ];
 
   return (
     <ThemedView
@@ -26,7 +36,9 @@ export function WeeklyChart({ data, totalTime }: WeeklyChartProps) {
       style={[styles.container, { borderColor: Colors[colorScheme].border }]}
     >
       <View style={styles.header}>
-        <ThemedText style={styles.title}>週間学習時間</ThemedText>
+        <ThemedText style={styles.title}>
+          {t("analysis.weeklyLearningTime")}
+        </ThemedText>
         <ThemedView
           variant="surface"
           style={[
@@ -44,7 +56,7 @@ export function WeeklyChart({ data, totalTime }: WeeklyChartProps) {
               },
             ]}
           >
-            合計 {totalTime}
+            {t("analysis.total", { time: totalTime })}
           </ThemedText>
         </ThemedView>
       </View>

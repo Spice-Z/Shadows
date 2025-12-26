@@ -9,10 +9,12 @@ import { AudioListItem } from "@/components/AudioListItem";
 import { mockAudioList, mockStreakCount } from "@/data/mock-audio";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <ThemedView style={styles.container}>
@@ -26,7 +28,7 @@ export default function HomeScreen() {
             },
           ]}
         >
-          <ThemedText style={styles.headerTitle}>音源リスト</ThemedText>
+          <ThemedText style={styles.headerTitle}>{t("home.title")}</ThemedText>
           <StreakTag count={mockStreakCount} />
         </ThemedView>
 
@@ -44,9 +46,11 @@ export default function HomeScreen() {
           {/* Library Section */}
           <View style={styles.section}>
             <View style={styles.sectionHeader}>
-              <ThemedText style={styles.sectionTitle}>ライブラリ</ThemedText>
-              <ThemedText type="secondary" style={styles.sectionCount}>
-                {mockAudioList.length}件
+              <ThemedText style={styles.sectionTitle}>
+                {t("home.library")}
+              </ThemedText>
+              <ThemedText variant="secondary" style={styles.sectionCount}>
+                {t("home.itemCount", { count: mockAudioList.length })}
               </ThemedText>
             </View>
 

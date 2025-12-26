@@ -2,7 +2,7 @@ import { WeeklyData } from "@/components/WeeklyChart";
 import { CalendarDay } from "@/components/MonthlyCalendar";
 
 export const mockStreakDays = 12;
-export const mockStreakMessage = "素晴らしい継続力です！";
+// Streak message is now handled by translations
 
 export const mockWeeklyData: WeeklyData[] = [
   { day: "月", percentage: 45 },

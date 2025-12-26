@@ -4,25 +4,22 @@ import { ThemedView } from "./ThemedView";
 import { useTheme } from "@/contexts/theme-context";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
+import { useTranslation } from "@/hooks/use-translation";
 
 export function ThemeSelector() {
   const { colorScheme, setColorScheme } = useTheme();
   const actualColorScheme = useColorScheme();
+  const { t } = useTranslation();
 
-  const options: { value: "light" | "dark" | "auto"; label: string }[] = [
-    { value: "light", label: "Light" },
-    { value: "dark", label: "Dark" },
-    { value: "auto", label: "Auto" },
+  const options: { value: "light" | "dark" | "auto"; labelKey: string }[] = [
+    { value: "light", labelKey: "theme.light" },
+    { value: "dark", labelKey: "theme.dark" },
+    { value: "auto", labelKey: "theme.auto" },
   ];
 
   return (
     <ThemedView variant="surface" style={styles.container}>
-      <ThemedText type="subtitle" style={styles.title}>
-        Theme Selector (Debug)
-      </ThemedText>
-      <ThemedText type="secondary" style={styles.subtitle}>
-        Current: {actualColorScheme} {colorScheme !== "auto" && `(forced)`}
-      </ThemedText>
+      <ThemedText style={styles.title}>{t("theme.title")}</ThemedText>
       <View style={styles.optionsContainer}>
         {options.map((option) => (
           <TouchableOpacity
@@ -52,7 +49,7 @@ export function ThemeSelector() {
                 },
               ]}
             >
-              {option.label}
+              {t(option.labelKey)}
             </ThemedText>
           </TouchableOpacity>
         ))}
@@ -69,11 +66,9 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   title: {
-    marginBottom: 4,
-  },
-  subtitle: {
     marginBottom: 12,
-    fontSize: 12,
+    fontWeight: "bold",
+    fontSize: 16,
   },
   optionsContainer: {
     flexDirection: "row",

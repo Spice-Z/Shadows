@@ -6,24 +6,24 @@
 import { Platform } from "react-native";
 
 // Primary brand color
-const primary = "#16439c";
+const primary = "#0d1629";
 
 // Background colors
-const backgroundLight = "#f6f6f8";
+const backgroundLight = "#f7f9fa";
 const backgroundDark = "#111621";
 
 // Surface colors
 const surfaceLight = "#ffffff";
-const surfaceDark = "#1e293b"; // slate-800
+const surfaceDark = "#1e293b";
 
 // Text colors
-const textPrimaryLight = "#0f172a"; // slate-900
+const textPrimaryLight = "#0d1629";
 const textPrimaryDark = "#ffffff";
-const textSecondaryLight = "#64748b"; // slate-500
+const textSecondaryLight = "#63748a";
 const textSecondaryDark = "#94a3b8"; // slate-400
 
 // Border colors
-const borderLight = "#e2e8f0"; // slate-200
+const borderLight = "#e1e8f0"; // slate-200
 const borderDark = "#334155"; // slate-700
 
 // Icon colors

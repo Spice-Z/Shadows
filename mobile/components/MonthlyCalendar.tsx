@@ -33,7 +33,10 @@ export function MonthlyCalendar({
   const monthLabel = `${year}年 ${month}月`;
 
   return (
-    <ThemedView variant="surface" style={styles.container}>
+    <ThemedView
+      variant="surface"
+      style={[styles.container, { borderColor: Colors[colorScheme].border }]}
+    >
       <View style={styles.header}>
         <ThemedText style={styles.title}>{monthLabel}</ThemedText>
         <View style={styles.navigation}>
@@ -129,6 +132,14 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 16,
     borderWidth: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   header: {
     flexDirection: "row",

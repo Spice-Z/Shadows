@@ -25,7 +25,10 @@ export function StatCard({
   const colorScheme = useColorScheme();
 
   return (
-    <ThemedView variant="surface" style={styles.container}>
+    <ThemedView
+      variant="surface"
+      style={[styles.container, { borderColor: Colors[colorScheme].border }]}
+    >
       <View style={styles.header}>
         <ThemedText type="secondary" style={styles.label}>
           {label}
@@ -70,6 +73,14 @@ const styles = StyleSheet.create({
     height: 112,
     width: "100%",
     justifyContent: "space-between",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   header: {
     flexDirection: "row",

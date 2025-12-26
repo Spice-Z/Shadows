@@ -9,7 +9,10 @@ export function AddNewAudio() {
   const colorScheme = useColorScheme();
 
   return (
-    <ThemedView variant="surface" style={styles.container}>
+    <ThemedView
+      variant="surface"
+      style={[styles.container, { borderColor: Colors[colorScheme].border }]}
+    >
       <View style={styles.header}>
         <View style={styles.headerContent}>
           <ThemedText style={styles.title}>新しい音源を追加</ThemedText>
@@ -76,6 +79,14 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     borderWidth: 1,
     gap: 16,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   header: {
     flexDirection: "row",

@@ -2,7 +2,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
-import { HapticTab } from "@/components/HapticTabs";
+import { HapticTab } from "@/components/HapticTab";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 

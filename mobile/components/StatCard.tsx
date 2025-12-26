@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     borderWidth: 1,
     height: 112,
+    width: "100%",
     justifyContent: "space-between",
   },
   header: {

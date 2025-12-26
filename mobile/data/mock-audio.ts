@@ -16,13 +16,6 @@ export const mockAudioList: AudioListItemProps[] = [
     lastPlayed: "2日前",
   },
   {
-    title: "自己紹介練習 001",
-    practiceCount: 3,
-    sourceType: "recording",
-    duration: "00:45",
-    lastPlayed: "今日",
-  },
-  {
     title: "Daily Conversation: Restaurant",
     practiceCount: 0,
     sourceType: "import",

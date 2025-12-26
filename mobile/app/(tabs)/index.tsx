@@ -1,5 +1,6 @@
 import { StyleSheet, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { StreakTag } from "@/components/StreakTag";
@@ -11,6 +12,7 @@ import { Colors } from "@/constants/theme";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
+  const router = useRouter();
 
   return (
     <ThemedView style={styles.container}>
@@ -54,7 +56,7 @@ export default function HomeScreen() {
                   key={index}
                   {...audio}
                   onPress={() => {
-                    // Handle audio item press
+                    router.push(`/study/${index}`);
                   }}
                   onMorePress={() => {
                     // Handle more options press

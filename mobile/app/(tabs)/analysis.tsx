@@ -93,20 +93,24 @@ export default function AnalysisScreen() {
 
           {/* Stat Cards */}
           <View style={styles.statsContainer}>
-            <StatCard
-              label="総合学習時間"
-              value={mockTotalLearningTime.hours.toString()}
-              unit="h"
-              secondaryValue={mockTotalLearningTime.minutes.toString()}
-              secondaryUnit="m"
-              icon="schedule"
-            />
-            <StatCard
-              label="総合学習回数"
-              value={mockTotalSessions.toString()}
-              unit="回"
-              icon="repeat"
-            />
+            <View style={styles.statCardContainer}>
+              <StatCard
+                label="総合学習時間"
+                value={mockTotalLearningTime.hours.toString()}
+                unit="h"
+                secondaryValue={mockTotalLearningTime.minutes.toString()}
+                secondaryUnit="m"
+                icon="schedule"
+              />
+            </View>
+            <View style={styles.statCardContainer}>
+              <StatCard
+                label="総合学習回数"
+                value={mockTotalSessions.toString()}
+                unit="回"
+                icon="repeat"
+              />
+            </View>
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -157,5 +161,9 @@ const styles = StyleSheet.create({
   statsContainer: {
     flexDirection: "row",
     gap: 16,
+  },
+  statCardContainer: {
+    width: "48%",
+    flex: 1,
   },
 });

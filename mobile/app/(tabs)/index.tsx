@@ -4,7 +4,7 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { StreakTag } from "@/components/streak-tag";
 import { AddNewAudio } from "@/components/add-new-audio";
-import { AudioListItem } from "@/components/audio-list-item";
+import { AudioListItem } from "@/components/AudioListItem";
 import { mockAudioList, mockStreakCount } from "@/data/mock-audio";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
@@ -48,7 +48,6 @@ export default function HomeScreen() {
               </ThemedText>
             </View>
 
-            {/* Audio List */}
             <View style={styles.audioList}>
               {mockAudioList.map((audio, index) => (
                 <AudioListItem
@@ -117,6 +116,6 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   audioList: {
-    gap: 0,
+    gap: 4,
   },
 });

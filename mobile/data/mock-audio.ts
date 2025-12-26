@@ -1,4 +1,4 @@
-import { AudioListItemProps } from "@/components/audio-list-item";
+import { AudioListItemProps } from "@/components/AudioListItem";
 
 export const mockAudioList: AudioListItemProps[] = [
   {

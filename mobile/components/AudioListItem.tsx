@@ -31,12 +31,7 @@ export function AudioListItem({
 
   return (
     <TouchableOpacity
-      style={[
-        styles.container,
-        {
-          backgroundColor: "transparent",
-        },
-      ]}
+      style={[styles.container]}
       onPress={onPress}
       activeOpacity={0.7}
     >
@@ -125,9 +120,7 @@ export function AudioListItem({
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    marginHorizontal: 8,
+    paddingVertical: 8,
     borderRadius: 12,
   },
   content: {

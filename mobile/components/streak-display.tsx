@@ -9,7 +9,10 @@ interface StreakDisplayProps {
   message?: string;
 }
 
-export function StreakDisplay({ days, message = "素晴らしい継続力です！" }: StreakDisplayProps) {
+export function StreakDisplay({
+  days,
+  message = "素晴らしい継続力です！",
+}: StreakDisplayProps) {
   const colorScheme = useColorScheme();
 
   return (
@@ -21,12 +24,14 @@ export function StreakDisplay({ days, message = "素晴らしい継続力です�
           color={Colors[colorScheme].text}
         />
         <View style={styles.streakContainer}>
-          <ThemedText style={styles.days}>{days}</ThemedText>
-          <ThemedText type="secondary" style={styles.label}>
+          <ThemedText size="5xl" style={styles.days}>
+            {days}
+          </ThemedText>
+          <ThemedText type="secondary" size="lg" style={styles.label}>
             日連続
           </ThemedText>
         </View>
-        <ThemedText type="secondary" style={styles.message}>
+        <ThemedText type="secondary" size="sm" style={styles.message}>
           {message}
         </ThemedText>
       </View>
@@ -50,18 +55,14 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   days: {
-    fontSize: 48,
     fontWeight: "bold",
     letterSpacing: -1,
   },
   label: {
-    fontSize: 18,
     fontWeight: "bold",
   },
   message: {
-    fontSize: 12,
     fontWeight: "500",
     marginTop: 4,
   },
 });
-

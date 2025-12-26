@@ -48,18 +48,19 @@ export default function AnalysisScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        {/* Header */}
         <ThemedView
           style={[
             styles.header,
             {
               borderBottomColor: Colors[colorScheme].border,
             },
-          ]}>
+          ]}
+        >
           <ThemedText style={styles.headerTitle}>分析</ThemedText>
           <TouchableOpacity
             style={styles.settingsButton}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
             <MaterialIcons
               name="settings"
               size={24}
@@ -68,15 +69,13 @@ export default function AnalysisScreen() {
           </TouchableOpacity>
         </ThemedView>
 
-        {/* Content */}
         <ScrollView
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator={false}>
-          {/* Streak Display */}
+          showsVerticalScrollIndicator={false}
+        >
           <StreakDisplay days={mockStreakDays} message={mockStreakMessage} />
 
-          {/* Weekly Chart */}
           <View style={styles.section}>
             <WeeklyChart data={mockWeeklyData} totalTime={mockWeeklyTotal} />
           </View>
@@ -138,8 +137,10 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   settingsButton: {
-    padding: 8,
-    marginRight: -8,
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
     borderRadius: 9999,
   },
   scrollView: {

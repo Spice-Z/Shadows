@@ -1,6 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { ThemedText } from "./themed-text";
-import { ThemedView } from "./themed-view";
+import { ThemedText } from "./ThemedText";
+import { ThemedView } from "./ThemedView";
 import { useTheme } from "@/contexts/theme-context";
 import { Colors } from "@/constants/theme";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -9,7 +9,7 @@ export function ThemeSelector() {
   const { colorScheme, setColorScheme } = useTheme();
   const actualColorScheme = useColorScheme();
 
-  const options: Array<{ value: "light" | "dark" | "auto"; label: string }> = [
+  const options: { value: "light" | "dark" | "auto"; label: string }[] = [
     { value: "light", label: "Light" },
     { value: "dark", label: "Dark" },
     { value: "auto", label: "Auto" },
@@ -39,7 +39,8 @@ export function ThemeSelector() {
               },
             ]}
             onPress={() => setColorScheme(option.value)}
-            activeOpacity={0.7}>
+            activeOpacity={0.7}
+          >
             <ThemedText
               style={[
                 styles.optionText,
@@ -49,7 +50,8 @@ export function ThemeSelector() {
                       ? Colors[actualColorScheme].buttonPrimaryText
                       : Colors[actualColorScheme].text,
                 },
-              ]}>
+              ]}
+            >
               {option.label}
             </ThemedText>
           </TouchableOpacity>
@@ -94,4 +96,3 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-

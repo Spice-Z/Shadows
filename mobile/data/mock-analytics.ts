@@ -1,5 +1,5 @@
-import { WeeklyData } from "@/components/weekly-chart";
-import { CalendarDay } from "@/components/monthly-calendar";
+import { WeeklyData } from "@/components/WeeklyChart";
+import { CalendarDay } from "@/components/MonthlyCalendar";
 
 export const mockStreakDays = 12;
 export const mockStreakMessage = "素晴らしい継続力です！";
@@ -17,12 +17,16 @@ export const mockWeeklyData: WeeklyData[] = [
 export const mockWeeklyTotal = "3h 45m";
 
 // Generate calendar days for October 2023
-export function generateCalendarDays(year: number, month: number): CalendarDay[] {
+export function generateCalendarDays(
+  year: number,
+  month: number
+): CalendarDay[] {
   const days: CalendarDay[] = [];
   const firstDay = new Date(year, month - 1, 1).getDay();
   const daysInMonth = new Date(year, month, 0).getDate();
   const today = new Date();
-  const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month - 1;
+  const isCurrentMonth =
+    today.getFullYear() === year && today.getMonth() === month - 1;
 
   // Empty cells for days before the first day of the month
   for (let i = 0; i < firstDay; i++) {
@@ -31,11 +35,11 @@ export function generateCalendarDays(year: number, month: number): CalendarDay[]
 
   // Days with data (marked days)
   const markedDays = [2, 3, 5, 7, 8, 9, 10, 11, 12, 13, 14];
-  
+
   for (let day = 1; day <= daysInMonth; day++) {
     const hasData = markedDays.includes(day);
     const isToday = isCurrentMonth && day === today.getDate();
-    
+
     days.push({
       date: day,
       hasData,
@@ -49,4 +53,3 @@ export function generateCalendarDays(year: number, month: number): CalendarDay[]
 
 export const mockTotalLearningTime = { hours: 42, minutes: 15 };
 export const mockTotalSessions = 128;
-

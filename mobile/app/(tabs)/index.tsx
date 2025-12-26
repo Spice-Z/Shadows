@@ -1,9 +1,9 @@
 import { StyleSheet, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ThemedText } from "@/components/themed-text";
-import { ThemedView } from "@/components/themed-view";
-import { StreakTag } from "@/components/streak-tag";
-import { AddNewAudio } from "@/components/add-new-audio";
+import { ThemedText } from "@/components/ThemedText";
+import { ThemedView } from "@/components/ThemedView";
+import { StreakTag } from "@/components/StreakTag";
+import { AddNewAudio } from "@/components/AddNewAudio";
 import { AudioListItem } from "@/components/AudioListItem";
 import { mockAudioList, mockStreakCount } from "@/data/mock-audio";
 import { useColorScheme } from "@/hooks/use-color-scheme";

@@ -1,7 +1,7 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { ThemedText } from "./themed-text";
-import { ThemedView } from "./themed-view";
+import { ThemedText } from "./ThemedText";
+import { ThemedView } from "./ThemedView";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
 
@@ -40,7 +40,8 @@ export function MonthlyCalendar({
           <TouchableOpacity
             style={styles.navButton}
             onPress={onPreviousMonth}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
             <MaterialIcons
               name="chevron-left"
               size={20}
@@ -50,7 +51,8 @@ export function MonthlyCalendar({
           <TouchableOpacity
             style={styles.navButton}
             onPress={onNextMonth}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
             <MaterialIcons
               name="chevron-right"
               size={20}
@@ -60,7 +62,6 @@ export function MonthlyCalendar({
         </View>
       </View>
 
-      {/* Weekday headers */}
       <View style={styles.weekdayRow}>
         {WEEKDAYS.map((day) => (
           <View key={day} style={styles.weekdayCell}>
@@ -71,7 +72,6 @@ export function MonthlyCalendar({
         ))}
       </View>
 
-      {/* Calendar grid */}
       <View style={styles.calendarGrid}>
         {days.map((day, index) => {
           if (day.isEmpty) {
@@ -95,7 +95,8 @@ export function MonthlyCalendar({
                         : Colors[colorScheme].buttonPrimaryBg,
                       borderColor: Colors[colorScheme].buttonPrimaryBg,
                     },
-                  ]}>
+                  ]}
+                >
                   <ThemedText
                     style={[
                       styles.dayText,
@@ -105,7 +106,8 @@ export function MonthlyCalendar({
                           : Colors[colorScheme].buttonPrimaryText,
                         fontWeight: isToday ? "bold" : "500",
                       },
-                    ]}>
+                    ]}
+                  >
                     {day.date}
                   </ThemedText>
                 </ThemedView>
@@ -185,4 +187,3 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
 });
-

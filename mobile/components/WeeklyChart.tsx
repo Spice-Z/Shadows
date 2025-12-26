@@ -1,12 +1,12 @@
 import { StyleSheet, View } from "react-native";
-import { ThemedText } from "./themed-text";
-import { ThemedView } from "./themed-view";
+import { ThemedText } from "./ThemedText";
+import { ThemedView } from "./ThemedView";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { Colors } from "@/constants/theme";
 
 export interface WeeklyData {
   day: string;
-  percentage: number; // 0-100
+  percentage: number;
 }
 
 interface WeeklyChartProps {
@@ -31,14 +31,16 @@ export function WeeklyChart({ data, totalTime }: WeeklyChartProps) {
             {
               backgroundColor: Colors[colorScheme].badgeBg,
             },
-          ]}>
+          ]}
+        >
           <ThemedText
             style={[
               styles.totalText,
               {
                 color: Colors[colorScheme].badgeText,
               },
-            ]}>
+            ]}
+          >
             合計 {totalTime}
           </ThemedText>
         </ThemedView>
@@ -58,7 +60,8 @@ export function WeeklyChart({ data, totalTime }: WeeklyChartProps) {
                     height: maxHeight,
                     backgroundColor: Colors[colorScheme].badgeBg,
                   },
-                ]}>
+                ]}
+              >
                 {height > 0 && (
                   <View
                     style={[
@@ -78,7 +81,8 @@ export function WeeklyChart({ data, totalTime }: WeeklyChartProps) {
                 style={[
                   styles.dayLabel,
                   isEmpty && { color: Colors[colorScheme].textSecondary },
-                ]}>
+                ]}
+              >
                 {day}
               </ThemedText>
             </View>
@@ -143,4 +147,3 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 });
-

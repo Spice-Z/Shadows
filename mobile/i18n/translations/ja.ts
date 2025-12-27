@@ -61,6 +61,17 @@ export default {
     myRecording: "自分の録音",
   },
 
+  // Record screen
+  record: {
+    title: "新規録音",
+    tapToRecord: "タップして録音開始",
+    recording: "録音中...",
+    tapToStop: "タップして停止",
+    discard: "破棄",
+    save: "保存",
+    recordingComplete: "録音完了",
+  },
+
   // Explore screen
   explore: {
     title: "探索",

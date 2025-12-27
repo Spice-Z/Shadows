@@ -1,5 +1,6 @@
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useRouter } from "expo-router";
 import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { useColorScheme } from "@/hooks/useColorScheme";
@@ -9,6 +10,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 export function AddNewAudio() {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
+  const router = useRouter();
 
   return (
     <ThemedView
@@ -43,6 +45,7 @@ export function AddNewAudio() {
             },
           ]}
           activeOpacity={0.8}
+          onPress={() => router.push("/record")}
         >
           <MaterialIcons
             name="mic"

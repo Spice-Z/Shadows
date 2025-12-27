@@ -61,6 +61,17 @@ export default {
     myRecording: "My Recording",
   },
 
+  // Record screen
+  record: {
+    title: "New Recording",
+    tapToRecord: "Tap to start recording",
+    recording: "Recording...",
+    tapToStop: "Tap to stop",
+    discard: "Discard",
+    save: "Save",
+    recordingComplete: "Recording complete",
+  },
+
   // Explore screen
   explore: {
     title: "Explore",

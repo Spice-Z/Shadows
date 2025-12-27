@@ -1,8 +1,9 @@
 import { StyleSheet, ScrollView, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useRouter } from "expo-router";
+import { Stack, useRouter } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { Header } from "@/components/Header";
 import { StreakTag } from "@/components/StreakTag";
 import { AddNewAudio } from "@/components/AddNewAudio";
 import { AudioListItem } from "@/components/AudioListItem";
@@ -21,18 +22,10 @@ export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        {/* Header */}
-        <ThemedView
-          style={[
-            styles.header,
-            {
-              borderBottomColor: Colors[colorScheme].border,
-            },
-          ]}
-        >
-          <ThemedText style={styles.headerTitle}>{t("home.title")}</ThemedText>
-          <StreakTag count={mockStreakCount} />
-        </ThemedView>
+        <Header
+          title={t("home.title")}
+          rightElement={<StreakTag count={mockStreakCount} />}
+        />
 
         {/* Content */}
         <ScrollView
@@ -89,21 +82,6 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    height: 56,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    lineHeight: 24,
-    letterSpacing: -0.5,
   },
   scrollView: {
     flex: 1,

@@ -1,8 +1,8 @@
 import { StyleSheet, ScrollView, TouchableOpacity, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { Header } from "@/components/Header";
 import { StreakDisplay } from "@/components/StreakDisplay";
 import { WeeklyChart } from "@/components/WeeklyChart";
 import { MonthlyCalendar } from "@/components/MonthlyCalendar";
@@ -49,28 +49,21 @@ export default function AnalysisScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <ThemedView
-          style={[
-            styles.header,
-            {
-              borderBottomColor: Colors[colorScheme].border,
-            },
-          ]}
-        >
-          <ThemedText style={styles.headerTitle}>
-            {t("analysis.title")}
-          </ThemedText>
-          <TouchableOpacity
-            style={styles.settingsButton}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <MaterialIcons
-              name="settings"
-              size={24}
-              color={Colors[colorScheme].text}
-            />
-          </TouchableOpacity>
-        </ThemedView>
+        <Header
+          title={t("analysis.title")}
+          rightElement={
+            <TouchableOpacity
+              style={styles.settingsButton}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <MaterialIcons
+                name="settings"
+                size={24}
+                color={Colors[colorScheme].text}
+              />
+            </TouchableOpacity>
+          }
+        />
 
         <ScrollView
           style={styles.scrollView}
@@ -128,21 +121,6 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    height: 56,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    lineHeight: 24,
-    letterSpacing: -0.5,
   },
   settingsButton: {
     width: 40,

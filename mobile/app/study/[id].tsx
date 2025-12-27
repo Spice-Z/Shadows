@@ -5,6 +5,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useState, useMemo } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
+import { Header } from "@/components/Header";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 import { AudioSourceToggle } from "@/components/AudioSourceToggle";
@@ -42,36 +43,22 @@ export default function StudyScreen() {
   return (
     <ThemedView style={styles.container}>
       <SafeAreaView edges={["top"]} style={styles.safeArea}>
-        <ThemedView
-          style={[
-            styles.header,
-            {
-              borderBottomColor: Colors[colorScheme].border,
-            },
-          ]}
-        >
-          <TouchableOpacity
-            style={styles.headerButton}
-            onPress={() => router.back()}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <MaterialIcons
-              name="arrow-back"
-              size={24}
-              color={Colors[colorScheme].text}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.headerButton}
-            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          >
-            <MaterialIcons
-              name="more-horiz"
-              size={24}
-              color={Colors[colorScheme].text}
-            />
-          </TouchableOpacity>
-        </ThemedView>
+        <Header
+          showBackButton
+          onBackPress={() => router.back()}
+          rightElement={
+            <TouchableOpacity
+              style={styles.headerButton}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <MaterialIcons
+                name="more-horiz"
+                size={24}
+                color={Colors[colorScheme].text}
+              />
+            </TouchableOpacity>
+          }
+        />
 
         <ScrollView
           style={styles.scrollView}
@@ -136,14 +123,6 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 16,
-    height: 56,
-    borderBottomWidth: 1,
   },
   headerButton: {
     width: 40,

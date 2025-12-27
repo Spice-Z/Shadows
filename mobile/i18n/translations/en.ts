@@ -59,6 +59,8 @@ export default {
   study: {
     modelAudio: "Model Audio",
     myRecording: "My Recording",
+    noModelAudioYet: "No model audio yet. Go to Record to add one!",
+    noRecordingYet: "No recording yet. Record your voice to compare!",
   },
 
   // Record screen
@@ -73,6 +75,10 @@ export default {
     permissionRequired: "Microphone Access Required",
     permissionMessage:
       "This app needs access to your microphone to record audio. Please grant permission in settings.",
+    saveSuccess: "Saved",
+    saveSuccessMessage: "Your recording has been saved.",
+    saveError: "Failed to save recording. Please try again.",
+    noRecording: "No recording available",
   },
 
   // Explore screen

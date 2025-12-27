@@ -26,15 +26,12 @@ export function useAudioRecording(
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const audioRecorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
-  // recorderState can be used for more detailed status if needed
   useAudioRecorderState(audioRecorder);
 
-  // Check and request permissions on mount
   useEffect(() => {
     checkPermission();
   }, []);
 
-  // Update duration while recording
   useEffect(() => {
     if (state === "recording") {
       const recordingStartTime = Date.now();
@@ -83,7 +80,6 @@ export function useAudioRecording(
     try {
       setError(null);
 
-      // Check permission first
       if (!hasPermission) {
         const granted = await requestPermission();
         if (!granted) {
@@ -94,18 +90,14 @@ export function useAudioRecording(
         }
       }
 
-      // Set audio mode for recording
       await setAudioModeAsync({
         playsInSilentMode: true,
         allowsRecording: true,
       });
 
       setState("preparing");
-
-      // Prepare and start recording
       await audioRecorder.prepareToRecordAsync();
       audioRecorder.record();
-
       setState("recording");
     } catch (err) {
       const recordingError =

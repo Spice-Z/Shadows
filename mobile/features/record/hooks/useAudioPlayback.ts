@@ -14,7 +14,6 @@ async function configurePlaybackMode() {
   await setAudioModeAsync({
     playsInSilentMode: true,
     allowsRecording: false,
-    // only Android
     shouldRouteThroughEarpiece: false,
   });
 }
@@ -69,7 +68,6 @@ export function useAudioPlayback(
       setError(null);
       await configurePlaybackMode();
       if (status.currentTime >= status.duration && status.duration > 0) {
-        // If at the end, seek to beginning first
         player.seekTo(0);
       }
       player.play();
@@ -120,7 +118,7 @@ export function useAudioPlayback(
       player.pause();
       setState("idle");
     } catch {
-      // Ignore reset errors
+      // Ignore
     }
   }, [player]);
 

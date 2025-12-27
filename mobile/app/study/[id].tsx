@@ -2,7 +2,7 @@ import { StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Header } from "@/components/Header";
@@ -13,32 +13,79 @@ import { AudioWaveform } from "@/components/AudioWaveform";
 import { ProgressBar } from "@/components/ProgressBar";
 import { PlaybackControls } from "@/components/PlaybackControls";
 import { mockAudioList } from "@/data/mock-audio";
+import {
+  useAudioPlayback,
+  getRecordingPath,
+  hasRecordingSaved,
+} from "@/features/record";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export default function StudyScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
   const [audioSource, setAudioSource] = useState<"model" | "recording">(
     "model"
   );
-  const [isPlaying, setIsPlaying] = useState(false);
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [isRepeat, setIsRepeat] = useState(false);
-  const [currentTime, setCurrentTime] = useState(45); // seconds
+  const [hasModelAudio, setHasModelAudio] = useState(false);
 
-  // Get audio data based on id
   const audioData = useMemo(() => {
     const audioIndex = parseInt(id || "0", 10);
     return mockAudioList[audioIndex] || mockAudioList[0];
   }, [id]);
 
-  // Parse duration from audio data (format: "MM:SS")
-  const totalTime = useMemo(() => {
-    const [minutes, seconds] = audioData.duration.split(":").map(Number);
-    return minutes * 60 + seconds;
-  }, [audioData.duration]);
+  const modelAudioUri = useMemo(() => {
+    if (hasRecordingSaved()) {
+      return getRecordingPath();
+    }
+    return null;
+  }, [hasModelAudio]);
+
+  const {
+    isPlaying: isModelPlaying,
+    positionSeconds: modelPosition,
+    durationSeconds: modelDuration,
+    togglePlayPause: toggleModelPlayPause,
+    seekTo: seekModel,
+  } = useAudioPlayback(audioSource === "model" ? modelAudioUri : null);
+
+  useEffect(() => {
+    setHasModelAudio(hasRecordingSaved());
+  }, []);
+
+  const isPlaying = audioSource === "model" ? isModelPlaying : false;
+  const currentTime = audioSource === "model" ? modelPosition : 0;
+  const totalTime = audioSource === "model" ? modelDuration || 60 : 60;
+
+  const handlePlayPause = useCallback(() => {
+    if (audioSource === "model") {
+      toggleModelPlayPause();
+    }
+  }, [audioSource, toggleModelPlayPause]);
+
+  const handleSeek = useCallback(
+    (time: number) => {
+      if (audioSource === "model") {
+        seekModel(time);
+      }
+    },
+    [audioSource, seekModel]
+  );
+
+  const handleSkipBackward = useCallback(() => {
+    handleSeek(Math.max(0, currentTime - 10));
+  }, [currentTime, handleSeek]);
+
+  const handleSkipForward = useCallback(() => {
+    handleSeek(Math.min(totalTime, currentTime + 10));
+  }, [currentTime, totalTime, handleSeek]);
 
   const title = audioData.title;
+  const showNoModelMessage = audioSource === "model" && !hasModelAudio;
+  const showNoRecordingMessage = audioSource === "recording";
 
   return (
     <ThemedView style={styles.container}>
@@ -68,7 +115,37 @@ export default function StudyScreen() {
           <ThemedText style={styles.title}>{title}</ThemedText>
 
           <View style={styles.waveformContainer}>
-            <AudioWaveform currentTime={currentTime} totalTime={totalTime} />
+            {showNoModelMessage ? (
+              <View style={styles.noRecordingContainer}>
+                <MaterialIcons
+                  name="music-off"
+                  size={48}
+                  color={Colors[colorScheme].textSecondary}
+                />
+                <ThemedText
+                  style={styles.noRecordingText}
+                  color={Colors[colorScheme].textSecondary}
+                >
+                  {t("study.noModelAudioYet")}
+                </ThemedText>
+              </View>
+            ) : showNoRecordingMessage ? (
+              <View style={styles.noRecordingContainer}>
+                <MaterialIcons
+                  name="mic-off"
+                  size={48}
+                  color={Colors[colorScheme].textSecondary}
+                />
+                <ThemedText
+                  style={styles.noRecordingText}
+                  color={Colors[colorScheme].textSecondary}
+                >
+                  {t("study.noRecordingYet")}
+                </ThemedText>
+              </View>
+            ) : (
+              <AudioWaveform currentTime={currentTime} totalTime={totalTime} />
+            )}
           </View>
 
           <View style={styles.toggleContainer}>
@@ -78,7 +155,7 @@ export default function StudyScreen() {
             <ProgressBar
               currentTime={currentTime}
               totalTime={totalTime}
-              onSeek={(time) => setCurrentTime(time)}
+              onSeek={handleSeek}
             />
           </View>
 
@@ -87,15 +164,11 @@ export default function StudyScreen() {
               isPlaying={isPlaying}
               playbackSpeed={playbackSpeed}
               isRepeat={isRepeat}
-              onPlayPause={() => setIsPlaying(!isPlaying)}
+              onPlayPause={handlePlayPause}
               onSpeedChange={setPlaybackSpeed}
               onRepeatToggle={() => setIsRepeat(!isRepeat)}
-              onSkipBackward={() =>
-                setCurrentTime(Math.max(0, currentTime - 10))
-              }
-              onSkipForward={() =>
-                setCurrentTime(Math.min(totalTime, currentTime + 10))
-              }
+              onSkipBackward={handleSkipBackward}
+              onSkipForward={handleSkipForward}
             />
           </View>
 
@@ -158,6 +231,18 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 200,
     marginBottom: 32,
+  },
+  noRecordingContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    gap: 16,
+    paddingHorizontal: 32,
+  },
+  noRecordingText: {
+    fontSize: 16,
+    textAlign: "center",
+    lineHeight: 24,
   },
   progressContainer: {
     width: "100%",

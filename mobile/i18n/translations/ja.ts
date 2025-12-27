@@ -59,6 +59,8 @@ export default {
   study: {
     modelAudio: "お手本",
     myRecording: "自分の録音",
+    noModelAudioYet: "お手本の音声がありません。録音画面で追加してください！",
+    noRecordingYet: "まだ録音がありません。自分の声を録音して比較しましょう！",
   },
 
   // Record screen
@@ -73,6 +75,10 @@ export default {
     permissionRequired: "マイクへのアクセスが必要です",
     permissionMessage:
       "音声を録音するにはマイクへのアクセスが必要です。設定から許可してください。",
+    saveSuccess: "保存しました",
+    saveSuccessMessage: "録音を保存しました。",
+    saveError: "録音の保存に失敗しました。もう一度お試しください。",
+    noRecording: "録音がありません",
   },
 
   // Explore screen

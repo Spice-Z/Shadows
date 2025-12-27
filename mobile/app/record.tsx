@@ -17,7 +17,11 @@ import { Colors } from "@/constants/theme";
 import { RecordButton } from "@/components/RecordButton";
 import { RecordingWaveform } from "@/components/RecordingWaveform";
 import { useTranslation } from "@/hooks/useTranslation";
-import { useAudioRecording, RecordingPreview } from "@/features/record";
+import {
+  useAudioRecording,
+  RecordingPreview,
+  saveRecording,
+} from "@/features/record";
 
 export default function RecordScreen() {
   const router = useRouter();
@@ -88,12 +92,16 @@ export default function RecordScreen() {
     discardRecording();
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (recordingUri) {
-      // TODO: Save the recording to storage/backend
-      console.log("Saving recording:", recordingUri);
+      try {
+        await saveRecording(recordingUri);
+        Alert.alert(t("record.saveSuccess"), t("record.saveSuccessMessage"));
+        router.back();
+      } catch {
+        Alert.alert(t("common.error"), t("record.saveError"));
+      }
     }
-    router.back();
   };
 
   return (

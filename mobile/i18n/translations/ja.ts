@@ -81,6 +81,17 @@ export default {
     noRecording: "録音がありません",
   },
 
+  // Record preview screen
+  recordPreview: {
+    title: "録音プレビュー",
+    audioTitle: "タイトル",
+    audioTitlePlaceholder: "音声のタイトルを入力",
+    transcript: "文字起こし",
+    transcribing: "文字起こし中...",
+    noTranscript: "文字起こしがありません",
+    transcriptionFailed: "文字起こしに失敗しました",
+  },
+
   // Explore screen
   explore: {
     title: "探索",

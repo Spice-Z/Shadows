@@ -81,6 +81,17 @@ export default {
     noRecording: "No recording available",
   },
 
+  // Record preview screen
+  recordPreview: {
+    title: "Preview Recording",
+    audioTitle: "Title",
+    audioTitlePlaceholder: "Enter a title for this audio",
+    transcript: "Transcript",
+    transcribing: "Transcribing...",
+    noTranscript: "No transcript available",
+    transcriptionFailed: "Failed to transcribe audio",
+  },
+
   // Explore screen
   explore: {
     title: "Explore",

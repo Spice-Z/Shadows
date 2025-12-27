@@ -17,11 +17,7 @@ import { Colors } from "@/constants/theme";
 import { RecordButton } from "@/components/RecordButton";
 import { RecordingWaveform } from "@/components/RecordingWaveform";
 import { useTranslation } from "@/hooks/useTranslation";
-import {
-  useAudioRecording,
-  RecordingPreview,
-  saveRecording,
-} from "@/features/record";
+import { useAudioRecording, RecordingPreview } from "@/features/record";
 
 export default function RecordScreen() {
   const router = useRouter();
@@ -92,15 +88,12 @@ export default function RecordScreen() {
     discardRecording();
   };
 
-  const handleSave = async () => {
+  const handleNext = () => {
     if (recordingUri) {
-      try {
-        await saveRecording(recordingUri);
-        Alert.alert(t("record.saveSuccess"), t("record.saveSuccessMessage"));
-        router.back();
-      } catch {
-        Alert.alert(t("common.error"), t("record.saveError"));
-      }
+      router.push({
+        pathname: "/record-preview",
+        params: { uri: recordingUri, duration: durationSeconds },
+      });
     }
   };
 
@@ -182,27 +175,27 @@ export default function RecordScreen() {
                 <TouchableOpacity
                   style={[
                     styles.actionButton,
-                    styles.saveButton,
+                    styles.nextButton,
                     {
                       backgroundColor: Colors[colorScheme].buttonPrimaryBg,
                     },
                   ]}
-                  onPress={handleSave}
+                  onPress={handleNext}
                   activeOpacity={0.8}
                 >
-                  <MaterialIcons
-                    name="check"
-                    size={20}
-                    color={Colors[colorScheme].buttonPrimaryText}
-                  />
                   <ThemedText
                     style={[
                       styles.actionButtonText,
                       { color: Colors[colorScheme].buttonPrimaryText },
                     ]}
                   >
-                    {t("record.save")}
+                    {t("common.next")}
                   </ThemedText>
+                  <MaterialIcons
+                    name="arrow-forward"
+                    size={20}
+                    color={Colors[colorScheme].buttonPrimaryText}
+                  />
                 </TouchableOpacity>
               </View>
             </>
@@ -284,7 +277,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: "transparent",
   },
-  saveButton: {
+  nextButton: {
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

@@ -9,7 +9,17 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "infoPlist": {
+        "CFBundleLocalizations": [
+          "en",
+          "ja",
+          "en",
+          "ja"
+        ],
+        "ITSAppUsesNonExemptEncryption": false
+      },
+      "bundleIdentifier": "com.spicex.Shadows"
     },
     "android": {
       "adaptiveIcon": {
@@ -19,7 +29,11 @@
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
       "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "permissions": [
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
+      ]
     },
     "web": {
       "output": "static",
@@ -43,8 +57,14 @@
         "expo-localization",
         {
           "supportedLocales": {
-            "ios": ["en", "ja"],
-            "android": ["en", "ja"]
+            "ios": [
+              "en",
+              "ja"
+            ],
+            "android": [
+              "en",
+              "ja"
+            ]
           }
         }
       ],
@@ -53,11 +73,25 @@
         {
           "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone."
         }
-      ]
+      ],
+      [
+        "expo-speech-transcriber",
+        {
+          "speechRecognitionPermission": "Allow $(PRODUCT_NAME) to use speech recognition to transcribe your recordings.",
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone for transcription."
+        }
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e6494752-2c0a-4ee5-b270-57a384f304c9"
+      }
     }
   }
 }

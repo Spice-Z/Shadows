@@ -70,6 +70,9 @@ export default {
     discard: "Discard",
     save: "Save",
     recordingComplete: "Recording complete",
+    permissionRequired: "Microphone Access Required",
+    permissionMessage:
+      "This app needs access to your microphone to record audio. Please grant permission in settings.",
   },
 
   // Explore screen

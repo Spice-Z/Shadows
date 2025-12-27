@@ -70,6 +70,9 @@ export default {
     discard: "破棄",
     save: "保存",
     recordingComplete: "録音完了",
+    permissionRequired: "マイクへのアクセスが必要です",
+    permissionMessage:
+      "音声を録音するにはマイクへのアクセスが必要です。設定から許可してください。",
   },
 
   // Explore screen

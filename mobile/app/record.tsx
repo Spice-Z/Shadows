@@ -1,5 +1,11 @@
-import { useEffect, useRef, useState } from "react";
-import { StyleSheet, View, TouchableOpacity, ScrollView } from "react-native";
+import { useEffect } from "react";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  Alert,
+} from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -11,32 +17,56 @@ import { Colors } from "@/constants/theme";
 import { RecordButton } from "@/components/RecordButton";
 import { RecordingWaveform } from "@/components/RecordingWaveform";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useAudioRecording, RecordingPreview } from "@/features/record";
 
 export default function RecordScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordingTime, setRecordingTime] = useState(0);
-  const [hasRecording, setHasRecording] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+  const {
+    isRecording,
+    hasRecording,
+    durationSeconds,
+    recordingUri,
+    hasPermission,
+    error,
+    startRecording,
+    stopRecording,
+    discardRecording,
+    requestPermission,
+  } = useAudioRecording({
+    onRecordingComplete: (result) => {
+      console.log("Recording completed:", result.uri, result.duration);
+    },
+    onError: (err) => {
+      console.error("Recording error:", err);
+    },
+  });
+
+  // Request permission on mount if not granted
   useEffect(() => {
-    if (isRecording) {
-      timerRef.current = setInterval(() => {
-        setRecordingTime((prev) => prev + 1);
-      }, 1000);
-    } else if (timerRef.current) {
-      clearInterval(timerRef.current);
-      timerRef.current = null;
+    if (hasPermission === false) {
+      Alert.alert(
+        t("record.permissionRequired"),
+        t("record.permissionMessage"),
+        [
+          { text: t("common.cancel"), style: "cancel" },
+          {
+            text: t("common.ok"),
+            onPress: requestPermission,
+          },
+        ]
+      );
     }
+  }, [hasPermission, requestPermission, t]);
 
-    return () => {
-      if (timerRef.current) {
-        clearInterval(timerRef.current);
-      }
-    };
-  }, [isRecording]);
+  // Show error alert
+  useEffect(() => {
+    if (error) {
+      Alert.alert(t("common.error"), error);
+    }
+  }, [error, t]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -46,25 +76,23 @@ export default function RecordScreen() {
       .padStart(2, "0")}`;
   };
 
-  const handleRecordPress = () => {
+  const handleRecordPress = async () => {
     if (isRecording) {
-      setIsRecording(false);
-      setHasRecording(true);
+      await stopRecording();
     } else {
-      setIsRecording(true);
-      if (!hasRecording) {
-        setRecordingTime(0);
-      }
+      await startRecording();
     }
   };
 
   const handleDiscard = () => {
-    setHasRecording(false);
-    setRecordingTime(0);
-    setIsRecording(false);
+    discardRecording();
   };
 
   const handleSave = () => {
+    if (recordingUri) {
+      // TODO: Save the recording to storage/backend
+      console.log("Saving recording:", recordingUri);
+    }
     router.back();
   };
 
@@ -79,7 +107,7 @@ export default function RecordScreen() {
         >
           <View style={styles.timerContainer}>
             <ThemedText style={styles.timer}>
-              {formatTime(recordingTime)}
+              {formatTime(durationSeconds)}
             </ThemedText>
             <ThemedText
               style={styles.statusText}
@@ -115,53 +143,61 @@ export default function RecordScreen() {
           </View>
 
           {hasRecording && !isRecording && (
-            <View style={styles.actionButtonsContainer}>
-              <TouchableOpacity
-                style={[
-                  styles.actionButton,
-                  styles.discardButton,
-                  {
-                    borderColor: Colors[colorScheme].border,
-                  },
-                ]}
-                onPress={handleDiscard}
-                activeOpacity={0.8}
-              >
-                <MaterialIcons
-                  name="delete-outline"
-                  size={20}
-                  color={Colors[colorScheme].text}
+            <>
+              <View style={styles.previewContainer}>
+                <RecordingPreview
+                  uri={recordingUri}
+                  totalDurationSeconds={durationSeconds}
                 />
-                <ThemedText style={styles.actionButtonText}>
-                  {t("record.discard")}
-                </ThemedText>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[
-                  styles.actionButton,
-                  styles.saveButton,
-                  {
-                    backgroundColor: Colors[colorScheme].buttonPrimaryBg,
-                  },
-                ]}
-                onPress={handleSave}
-                activeOpacity={0.8}
-              >
-                <MaterialIcons
-                  name="check"
-                  size={20}
-                  color={Colors[colorScheme].buttonPrimaryText}
-                />
-                <ThemedText
+              </View>
+              <View style={styles.actionButtonsContainer}>
+                <TouchableOpacity
                   style={[
-                    styles.actionButtonText,
-                    { color: Colors[colorScheme].buttonPrimaryText },
+                    styles.actionButton,
+                    styles.discardButton,
+                    {
+                      borderColor: Colors[colorScheme].border,
+                    },
                   ]}
+                  onPress={handleDiscard}
+                  activeOpacity={0.8}
                 >
-                  {t("record.save")}
-                </ThemedText>
-              </TouchableOpacity>
-            </View>
+                  <MaterialIcons
+                    name="delete-outline"
+                    size={20}
+                    color={Colors[colorScheme].text}
+                  />
+                  <ThemedText style={styles.actionButtonText}>
+                    {t("record.discard")}
+                  </ThemedText>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.actionButton,
+                    styles.saveButton,
+                    {
+                      backgroundColor: Colors[colorScheme].buttonPrimaryBg,
+                    },
+                  ]}
+                  onPress={handleSave}
+                  activeOpacity={0.8}
+                >
+                  <MaterialIcons
+                    name="check"
+                    size={20}
+                    color={Colors[colorScheme].buttonPrimaryText}
+                  />
+                  <ThemedText
+                    style={[
+                      styles.actionButtonText,
+                      { color: Colors[colorScheme].buttonPrimaryText },
+                    ]}
+                  >
+                    {t("record.save")}
+                  </ThemedText>
+                </TouchableOpacity>
+              </View>
+            </>
           )}
         </ScrollView>
       </SafeAreaView>
@@ -216,6 +252,10 @@ const styles = StyleSheet.create({
   tapToStopText: {
     fontSize: 14,
     fontWeight: "500",
+  },
+  previewContainer: {
+    width: "100%",
+    marginBottom: 24,
   },
   actionButtonsContainer: {
     flexDirection: "row",

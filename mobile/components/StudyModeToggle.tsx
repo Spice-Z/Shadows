@@ -1,4 +1,15 @@
-import { StyleSheet, TouchableOpacity, View } from "react-native";
+import { useState } from "react";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  LayoutChangeEvent,
+} from "react-native";
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from "react-native-reanimated";
 import { ThemedText } from "./ThemedText";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
@@ -11,69 +22,81 @@ interface StudyModeToggleProps {
   onChange: (value: StudyMode) => void;
 }
 
+const PADDING = 4;
+
 export function StudyModeToggle({ value, onChange }: StudyModeToggleProps) {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
+  const [containerWidth, setContainerWidth] = useState(0);
+  const translateX = useSharedValue(0);
+
+  const indicatorWidth =
+    containerWidth > 0 ? (containerWidth - PADDING * 2) / 2 : 0;
+
+  const handleLayout = (event: LayoutChangeEvent) => {
+    const width = event.nativeEvent.layout.width;
+    setContainerWidth(width);
+    translateX.value = value === "listen" ? 0 : indicatorWidth;
+  };
+
+  const handleChange = (newValue: StudyMode) => {
+    const targetX = newValue === "listen" ? 0 : indicatorWidth;
+    translateX.value = withTiming(targetX, { duration: 200 });
+    onChange(newValue);
+  };
+
+  const indicatorStyle = useAnimatedStyle(() => ({
+    transform: [{ translateX: translateX.value }],
+  }));
 
   return (
     <View
       style={[
         styles.container,
-        {
-          backgroundColor: Colors[colorScheme].badgeBg,
-        },
+        { backgroundColor: Colors[colorScheme].badgeBg },
       ]}
+      onLayout={handleLayout}
     >
-      <TouchableOpacity
-        style={[
-          styles.option,
-          value === "listen" && [
-            styles.optionSelected,
+      {containerWidth > 0 && (
+        <Animated.View
+          style={[
+            styles.indicator,
             {
               backgroundColor: Colors[colorScheme].buttonPrimaryBg,
+              width: indicatorWidth,
             },
-          ],
-        ]}
-        onPress={() => onChange("listen")}
+            indicatorStyle,
+          ]}
+        />
+      )}
+      <TouchableOpacity
+        style={styles.option}
+        onPress={() => handleChange("listen")}
         activeOpacity={0.8}
       >
         <ThemedText
-          style={[
-            styles.optionText,
-            value === "listen" && {
-              color: Colors[colorScheme].buttonPrimaryText,
-            },
-            value !== "listen" && {
-              color: Colors[colorScheme].textSecondary,
-            },
-          ]}
+          style={styles.optionText}
+          color={
+            value === "listen"
+              ? Colors[colorScheme].buttonPrimaryText
+              : Colors[colorScheme].textSecondary
+          }
         >
           {t("study.listen")}
         </ThemedText>
       </TouchableOpacity>
       <TouchableOpacity
-        style={[
-          styles.option,
-          value === "record" && [
-            styles.optionSelected,
-            {
-              backgroundColor: Colors[colorScheme].buttonPrimaryBg,
-            },
-          ],
-        ]}
-        onPress={() => onChange("record")}
+        style={styles.option}
+        onPress={() => handleChange("record")}
         activeOpacity={0.8}
       >
         <ThemedText
-          style={[
-            styles.optionText,
-            value === "record" && {
-              color: Colors[colorScheme].buttonPrimaryText,
-            },
-            value !== "record" && {
-              color: Colors[colorScheme].textSecondary,
-            },
-          ]}
+          style={styles.optionText}
+          color={
+            value === "record"
+              ? Colors[colorScheme].buttonPrimaryText
+              : Colors[colorScheme].textSecondary
+          }
         >
           {t("study.record")}
         </ThemedText>
@@ -87,7 +110,19 @@ const styles = StyleSheet.create({
     height: 48,
     flexDirection: "row",
     borderRadius: 9999,
-    padding: 4,
+    padding: PADDING,
+  },
+  indicator: {
+    position: "absolute",
+    top: PADDING,
+    left: PADDING,
+    height: 40,
+    borderRadius: 9999,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    elevation: 2,
   },
   option: {
     flex: 1,
@@ -96,16 +131,8 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
     paddingHorizontal: 8,
   },
-  optionSelected: {
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
-  },
   optionText: {
     fontSize: 14,
     fontWeight: "600",
   },
 });
-

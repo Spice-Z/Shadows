@@ -57,6 +57,8 @@ export default {
 
   // Study screen
   study: {
+    listen: "聴く",
+    record: "録音",
     modelAudio: "お手本",
     myRecording: "自分の録音",
     noModelAudioYet: "お手本の音声がありません。録音画面で追加してください！",

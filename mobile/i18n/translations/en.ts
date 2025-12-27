@@ -57,6 +57,8 @@ export default {
 
   // Study screen
   study: {
+    listen: "Listen",
+    record: "Record",
     modelAudio: "Model Audio",
     myRecording: "My Recording",
     noModelAudioYet: "No model audio yet. Go to Record to add one!",

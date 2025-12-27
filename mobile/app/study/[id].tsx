@@ -8,26 +8,23 @@ import { ThemedView } from "@/components/ThemedView";
 import { Header } from "@/components/Header";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
-import { AudioSourceToggle } from "@/components/AudioSourceToggle";
-import { AudioWaveform } from "@/components/AudioWaveform";
+import { StudyModeToggle, StudyMode } from "@/components/StudyModeToggle";
+import { Transcript } from "@/components/Transcript";
 import { ProgressBar } from "@/components/ProgressBar";
 import { PlaybackControls } from "@/components/PlaybackControls";
+import { Spacer } from "@/components/Spacer";
 import { mockAudioList } from "@/data/mock-audio";
 import {
   useAudioPlayback,
   getRecordingPath,
   hasRecordingSaved,
 } from "@/features/record";
-import { useTranslation } from "@/hooks/useTranslation";
 
 export default function StudyScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
   const colorScheme = useColorScheme();
-  const { t } = useTranslation();
-  const [audioSource, setAudioSource] = useState<"model" | "recording">(
-    "model"
-  );
+  const [studyMode, setStudyMode] = useState<StudyMode>("listen");
   const [playbackSpeed, setPlaybackSpeed] = useState(1.0);
   const [isRepeat, setIsRepeat] = useState(false);
   const [hasModelAudio, setHasModelAudio] = useState(false);
@@ -38,7 +35,7 @@ export default function StudyScreen() {
   }, [id]);
 
   const modelAudioUri = useMemo(() => {
-    if (hasRecordingSaved()) {
+    if (hasModelAudio) {
       return getRecordingPath();
     }
     return null;
@@ -50,29 +47,29 @@ export default function StudyScreen() {
     durationSeconds: modelDuration,
     togglePlayPause: toggleModelPlayPause,
     seekTo: seekModel,
-  } = useAudioPlayback(audioSource === "model" ? modelAudioUri : null);
+  } = useAudioPlayback(studyMode === "listen" ? modelAudioUri : null);
 
   useEffect(() => {
     setHasModelAudio(hasRecordingSaved());
   }, []);
 
-  const isPlaying = audioSource === "model" ? isModelPlaying : false;
-  const currentTime = audioSource === "model" ? modelPosition : 0;
-  const totalTime = audioSource === "model" ? modelDuration || 60 : 60;
+  const isPlaying = studyMode === "listen" ? isModelPlaying : false;
+  const currentTime = studyMode === "listen" ? modelPosition : 0;
+  const totalTime = studyMode === "listen" ? modelDuration || 60 : 60;
 
   const handlePlayPause = useCallback(() => {
-    if (audioSource === "model") {
+    if (studyMode === "listen") {
       toggleModelPlayPause();
     }
-  }, [audioSource, toggleModelPlayPause]);
+  }, [studyMode, toggleModelPlayPause]);
 
   const handleSeek = useCallback(
     (time: number) => {
-      if (audioSource === "model") {
+      if (studyMode === "listen") {
         seekModel(time);
       }
     },
-    [audioSource, seekModel]
+    [studyMode, seekModel]
   );
 
   const handleSkipBackward = useCallback(() => {
@@ -84,8 +81,6 @@ export default function StudyScreen() {
   }, [currentTime, totalTime, handleSeek]);
 
   const title = audioData.title;
-  const showNoModelMessage = audioSource === "model" && !hasModelAudio;
-  const showNoRecordingMessage = audioSource === "recording";
 
   return (
     <ThemedView style={styles.container}>
@@ -112,45 +107,19 @@ export default function StudyScreen() {
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
         >
-          <ThemedText style={styles.title}>{title}</ThemedText>
-
-          <View style={styles.waveformContainer}>
-            {showNoModelMessage ? (
-              <View style={styles.noRecordingContainer}>
-                <MaterialIcons
-                  name="music-off"
-                  size={48}
-                  color={Colors[colorScheme].textSecondary}
-                />
-                <ThemedText
-                  style={styles.noRecordingText}
-                  color={Colors[colorScheme].textSecondary}
-                >
-                  {t("study.noModelAudioYet")}
-                </ThemedText>
-              </View>
-            ) : showNoRecordingMessage ? (
-              <View style={styles.noRecordingContainer}>
-                <MaterialIcons
-                  name="mic-off"
-                  size={48}
-                  color={Colors[colorScheme].textSecondary}
-                />
-                <ThemedText
-                  style={styles.noRecordingText}
-                  color={Colors[colorScheme].textSecondary}
-                >
-                  {t("study.noRecordingYet")}
-                </ThemedText>
-              </View>
-            ) : (
-              <AudioWaveform currentTime={currentTime} totalTime={totalTime} />
-            )}
+          <Spacer y={24} />
+          <View style={styles.titleContainer}>
+            <ThemedText size="2xl" weight="bold" align="center">
+              {title}
+            </ThemedText>
           </View>
+          <Spacer y={24} />
 
-          <View style={styles.toggleContainer}>
-            <AudioSourceToggle value={audioSource} onChange={setAudioSource} />
+          <View style={styles.transcriptContainer}>
+            <Transcript />
           </View>
+          <Spacer y={48} />
+
           <View style={styles.progressContainer}>
             <ProgressBar
               currentTime={currentTime}
@@ -158,6 +127,7 @@ export default function StudyScreen() {
               onSeek={handleSeek}
             />
           </View>
+          <Spacer y={32} />
 
           <View style={styles.controlsContainer}>
             <PlaybackControls
@@ -171,6 +141,12 @@ export default function StudyScreen() {
               onSkipForward={handleSkipForward}
             />
           </View>
+          <Spacer y={48} />
+
+          <View style={styles.toggleContainer}>
+            <StudyModeToggle value={studyMode} onChange={setStudyMode} />
+          </View>
+          <Spacer y={32} />
 
           <View style={styles.settingsContainer}>
             <TouchableOpacity
@@ -210,54 +186,32 @@ const styles = StyleSheet.create({
   scrollContent: {
     flexGrow: 1,
     alignItems: "center",
-    paddingHorizontal: 24,
-    paddingTop: 24,
     paddingBottom: 32,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    lineHeight: 32,
-    textAlign: "center",
-    marginBottom: 40,
+  titleContainer: {
+    width: "100%",
+    paddingHorizontal: 24,
   },
   toggleContainer: {
     width: "100%",
-    maxWidth: 320,
-    marginBottom: 40,
+    maxWidth: 400,
+    paddingHorizontal: 24,
   },
-  waveformContainer: {
+  transcriptContainer: {
     width: "100%",
-    flex: 1,
-    minHeight: 200,
-    marginBottom: 32,
-  },
-  noRecordingContainer: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 16,
-    paddingHorizontal: 32,
-  },
-  noRecordingText: {
-    fontSize: 16,
-    textAlign: "center",
-    lineHeight: 24,
   },
   progressContainer: {
     width: "100%",
-    marginBottom: 48,
+    paddingHorizontal: 24,
   },
   controlsContainer: {
     width: "100%",
-    maxWidth: 384,
-    marginBottom: "auto",
+    paddingHorizontal: 24,
   },
   settingsContainer: {
     width: "100%",
     alignItems: "flex-end",
     paddingHorizontal: 16,
-    marginTop: 32,
   },
   settingsButton: {
     width: 40,

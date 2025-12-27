@@ -26,6 +26,7 @@ export type ThemedTextProps = TextProps & {
   color?: string;
   weight?: "regular" | "medium" | "semibold" | "bold";
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl";
+  align?: "left" | "center" | "right";
 };
 
 export function ThemedText({
@@ -33,6 +34,7 @@ export function ThemedText({
   color: colorProp,
   weight = "regular",
   size,
+  align = "left",
   children,
   ...rest
 }: ThemedTextProps) {
@@ -47,7 +49,10 @@ export function ThemedText({
     locale === "ja" ? FONT_FAMILIES.noto[weight] : FONT_FAMILIES.lexend[weight];
 
   return (
-    <Text style={[{ color, fontFamily }, sizeStyle, style]} {...rest}>
+    <Text
+      style={[{ color, fontFamily, textAlign: align }, sizeStyle, style]}
+      {...rest}
+    >
       {children}
     </Text>
   );
@@ -76,18 +81,18 @@ const sizeStyles = StyleSheet.create({
   },
   "2xl": {
     fontSize: 24,
-    lineHeight: 30,
+    lineHeight: 32,
   },
   "3xl": {
     fontSize: 32,
-    lineHeight: 38,
+    lineHeight: 40,
   },
   "4xl": {
     fontSize: 40,
-    lineHeight: 46,
+    lineHeight: 48,
   },
   "5xl": {
     fontSize: 48,
-    lineHeight: 54,
+    lineHeight: 56,
   },
 });

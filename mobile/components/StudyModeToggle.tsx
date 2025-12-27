@@ -4,12 +4,14 @@ import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 import { useTranslation } from "@/hooks/useTranslation";
 
-interface AudioSourceToggleProps {
-  value: "model" | "recording";
-  onChange: (value: "model" | "recording") => void;
+export type StudyMode = "listen" | "record";
+
+interface StudyModeToggleProps {
+  value: StudyMode;
+  onChange: (value: StudyMode) => void;
 }
 
-export function AudioSourceToggle({ value, onChange }: AudioSourceToggleProps) {
+export function StudyModeToggle({ value, onChange }: StudyModeToggleProps) {
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
 
@@ -25,55 +27,55 @@ export function AudioSourceToggle({ value, onChange }: AudioSourceToggleProps) {
       <TouchableOpacity
         style={[
           styles.option,
-          value === "model" && [
+          value === "listen" && [
             styles.optionSelected,
             {
               backgroundColor: Colors[colorScheme].buttonPrimaryBg,
             },
           ],
         ]}
-        onPress={() => onChange("model")}
+        onPress={() => onChange("listen")}
         activeOpacity={0.8}
       >
         <ThemedText
           style={[
             styles.optionText,
-            value === "model" && {
+            value === "listen" && {
               color: Colors[colorScheme].buttonPrimaryText,
             },
-            value !== "model" && {
+            value !== "listen" && {
               color: Colors[colorScheme].textSecondary,
             },
           ]}
         >
-          {t("study.modelAudio")}
+          {t("study.listen")}
         </ThemedText>
       </TouchableOpacity>
       <TouchableOpacity
         style={[
           styles.option,
-          value === "recording" && [
+          value === "record" && [
             styles.optionSelected,
             {
               backgroundColor: Colors[colorScheme].buttonPrimaryBg,
             },
           ],
         ]}
-        onPress={() => onChange("recording")}
+        onPress={() => onChange("record")}
         activeOpacity={0.8}
       >
         <ThemedText
           style={[
             styles.optionText,
-            value === "recording" && {
+            value === "record" && {
               color: Colors[colorScheme].buttonPrimaryText,
             },
-            value !== "recording" && {
+            value !== "record" && {
               color: Colors[colorScheme].textSecondary,
             },
           ]}
         >
-          {t("study.myRecording")}
+          {t("study.record")}
         </ThemedText>
       </TouchableOpacity>
     </View>
@@ -106,3 +108,4 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
+

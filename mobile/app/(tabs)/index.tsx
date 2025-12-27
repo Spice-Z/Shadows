@@ -10,6 +10,8 @@ import { mockAudioList, mockStreakCount } from "@/data/mock-audio";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
 import { useTranslation } from "@/hooks/useTranslation";
+import { ThemeSelector } from "@/components/ThemeSelector";
+import { Spacer } from "@/components/Spacer";
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme();
@@ -72,6 +74,9 @@ export default function HomeScreen() {
               ))}
             </View>
           </View>
+          {/* For debugging */}
+          <Spacer y={40} />
+          <ThemeSelector />
         </ScrollView>
       </SafeAreaView>
     </ThemedView>

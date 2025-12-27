@@ -18,7 +18,13 @@ export function ThemeSelector() {
   ];
 
   return (
-    <ThemedView variant="surface" style={styles.container}>
+    <ThemedView
+      variant="surface"
+      style={[
+        styles.container,
+        { borderColor: Colors[actualColorScheme].border },
+      ]}
+    >
       <ThemedText style={styles.title}>{t("theme.title")}</ThemedText>
       <View style={styles.optionsContainer}>
         {options.map((option) => (

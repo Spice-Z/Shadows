@@ -4,6 +4,7 @@ import { ThemedText } from "./ThemedText";
 import { ThemedView } from "./ThemedView";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import { Colors } from "@/constants/theme";
+import { useTranslation } from "@/hooks/useTranslation";
 
 export type AudioSourceType = "import" | "recording";
 
@@ -27,6 +28,7 @@ export function AudioListItem({
   onMorePress,
 }: AudioListItemProps) {
   const colorScheme = useColorScheme();
+  const { t } = useTranslation();
   const isZeroCount = practiceCount === 0;
 
   return (
@@ -60,7 +62,7 @@ export function AudioListItem({
               isZeroCount && { color: Colors[colorScheme].textSecondary },
             ]}
           >
-            回
+            {t("analysis.sessions")}
           </ThemedText>
         </ThemedView>
 
@@ -82,7 +84,9 @@ export function AudioListItem({
               ]}
             >
               <ThemedText size="sm" weight="medium">
-                {sourceType === "recording" ? "録音" : "インポート"}
+                {sourceType === "recording"
+                  ? t("home.record")
+                  : t("home.import")}
               </ThemedText>
             </ThemedView>
             <ThemedText style={styles.metadataText}>

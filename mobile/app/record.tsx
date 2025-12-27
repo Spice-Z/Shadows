@@ -1,14 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   StyleSheet,
   View,
   TouchableOpacity,
   ScrollView,
+  TextInput,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useRouter } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import {
+  transcribeAudioWithSFRecognizer,
+  requestPermissions,
+} from "expo-speech-transcriber";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { Header } from "@/components/Header";
@@ -17,12 +23,21 @@ import { Colors } from "@/constants/theme";
 import { RecordButton } from "@/components/RecordButton";
 import { RecordingWaveform } from "@/components/RecordingWaveform";
 import { useTranslation } from "@/hooks/useTranslation";
-import { useAudioRecording, RecordingPreview } from "@/features/record";
+import {
+  useAudioRecording,
+  RecordingPreview,
+  saveRecording,
+} from "@/features/record";
 
 export default function RecordScreen() {
   const router = useRouter();
   const colorScheme = useColorScheme();
   const { t } = useTranslation();
+
+  const [title, setTitle] = useState("");
+  const [transcript, setTranscript] = useState("");
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
 
   const {
     isRecording,
@@ -44,7 +59,6 @@ export default function RecordScreen() {
     },
   });
 
-  // Request permission on mount if not granted
   useEffect(() => {
     if (hasPermission === false) {
       Alert.alert(
@@ -52,21 +66,39 @@ export default function RecordScreen() {
         t("record.permissionMessage"),
         [
           { text: t("common.cancel"), style: "cancel" },
-          {
-            text: t("common.ok"),
-            onPress: requestPermission,
-          },
+          { text: t("common.ok"), onPress: requestPermission },
         ]
       );
     }
   }, [hasPermission, requestPermission, t]);
 
-  // Show error alert
   useEffect(() => {
     if (error) {
       Alert.alert(t("common.error"), error);
     }
   }, [error, t]);
+
+  const transcribeAudio = useCallback(async () => {
+    if (!recordingUri) return;
+
+    setIsTranscribing(true);
+    try {
+      await requestPermissions();
+      const result = await transcribeAudioWithSFRecognizer(recordingUri);
+      setTranscript(result);
+    } catch (err) {
+      console.error("Transcription error:", err);
+      setTranscript(t("recordPreview.transcriptionFailed"));
+    } finally {
+      setIsTranscribing(false);
+    }
+  }, [recordingUri, t]);
+
+  useEffect(() => {
+    if (hasRecording && recordingUri) {
+      transcribeAudio();
+    }
+  }, [hasRecording, recordingUri, transcribeAudio]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
@@ -86,14 +118,22 @@ export default function RecordScreen() {
 
   const handleDiscard = () => {
     discardRecording();
+    setTitle("");
+    setTranscript("");
   };
 
-  const handleNext = () => {
-    if (recordingUri) {
-      router.push({
-        pathname: "/record-preview",
-        params: { uri: recordingUri, duration: durationSeconds },
-      });
+  const handleSave = async () => {
+    if (!recordingUri) return;
+
+    setIsSaving(true);
+    try {
+      await saveRecording(recordingUri);
+      Alert.alert(t("record.saveSuccess"), t("record.saveSuccessMessage"));
+      router.back();
+    } catch {
+      Alert.alert(t("common.error"), t("record.saveError"));
+    } finally {
+      setIsSaving(false);
     }
   };
 
@@ -105,6 +145,7 @@ export default function RecordScreen() {
           style={styles.scrollView}
           contentContainerStyle={styles.scrollContent}
           showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
         >
           <View style={styles.timerContainer}>
             <ThemedText style={styles.timer}>
@@ -124,26 +165,29 @@ export default function RecordScreen() {
             </ThemedText>
           </View>
 
-          <View style={styles.waveformContainer}>
-            <RecordingWaveform isRecording={isRecording} />
-          </View>
+          {!hasRecording && (
+            <>
+              <View style={styles.waveformContainer}>
+                <RecordingWaveform isRecording={isRecording} />
+              </View>
+              <View style={styles.recordButtonContainer}>
+                <RecordButton
+                  isRecording={isRecording}
+                  onPress={handleRecordPress}
+                />
+                {isRecording && (
+                  <ThemedText
+                    style={styles.tapToStopText}
+                    color={Colors[colorScheme].textSecondary}
+                  >
+                    {t("record.tapToStop")}
+                  </ThemedText>
+                )}
+              </View>
+            </>
+          )}
 
-          <View style={styles.recordButtonContainer}>
-            <RecordButton
-              isRecording={isRecording}
-              onPress={handleRecordPress}
-            />
-            {isRecording && (
-              <ThemedText
-                style={styles.tapToStopText}
-                color={Colors[colorScheme].textSecondary}
-              >
-                {t("record.tapToStop")}
-              </ThemedText>
-            )}
-          </View>
-
-          {hasRecording && !isRecording && (
+          {hasRecording && (
             <>
               <View style={styles.previewContainer}>
                 <RecordingPreview
@@ -151,14 +195,70 @@ export default function RecordScreen() {
                   totalDurationSeconds={durationSeconds}
                 />
               </View>
+
+              <ThemedText style={styles.label}>
+                {t("recordPreview.audioTitle")}
+              </ThemedText>
+              <TextInput
+                style={[
+                  styles.titleInput,
+                  {
+                    backgroundColor: Colors[colorScheme].surface,
+                    color: Colors[colorScheme].text,
+                    borderColor: Colors[colorScheme].border,
+                  },
+                ]}
+                value={title}
+                onChangeText={setTitle}
+                placeholder={t("recordPreview.audioTitlePlaceholder")}
+                placeholderTextColor={Colors[colorScheme].textSecondary}
+              />
+
+              <ThemedText style={styles.label}>
+                {t("recordPreview.transcript")}
+              </ThemedText>
+              <View
+                style={[
+                  styles.transcriptContainer,
+                  {
+                    backgroundColor: Colors[colorScheme].surface,
+                    borderColor: Colors[colorScheme].border,
+                  },
+                ]}
+              >
+                {isTranscribing ? (
+                  <View style={styles.loadingContainer}>
+                    <ActivityIndicator
+                      size="small"
+                      color={Colors[colorScheme].text}
+                    />
+                    <ThemedText
+                      style={styles.loadingText}
+                      color={Colors[colorScheme].textSecondary}
+                    >
+                      {t("recordPreview.transcribing")}
+                    </ThemedText>
+                  </View>
+                ) : (
+                  <ThemedText
+                    style={styles.transcriptText}
+                    color={
+                      transcript
+                        ? Colors[colorScheme].text
+                        : Colors[colorScheme].textSecondary
+                    }
+                  >
+                    {transcript || t("recordPreview.noTranscript")}
+                  </ThemedText>
+                )}
+              </View>
+
               <View style={styles.actionButtonsContainer}>
                 <TouchableOpacity
                   style={[
                     styles.actionButton,
                     styles.discardButton,
-                    {
-                      borderColor: Colors[colorScheme].border,
-                    },
+                    { borderColor: Colors[colorScheme].border },
                   ]}
                   onPress={handleDiscard}
                   activeOpacity={0.8}
@@ -175,27 +275,38 @@ export default function RecordScreen() {
                 <TouchableOpacity
                   style={[
                     styles.actionButton,
-                    styles.nextButton,
+                    styles.saveButton,
                     {
                       backgroundColor: Colors[colorScheme].buttonPrimaryBg,
+                      opacity: isTranscribing || isSaving ? 0.5 : 1,
                     },
                   ]}
-                  onPress={handleNext}
+                  onPress={handleSave}
                   activeOpacity={0.8}
+                  disabled={isTranscribing || isSaving}
                 >
-                  <ThemedText
-                    style={[
-                      styles.actionButtonText,
-                      { color: Colors[colorScheme].buttonPrimaryText },
-                    ]}
-                  >
-                    {t("common.next")}
-                  </ThemedText>
-                  <MaterialIcons
-                    name="arrow-forward"
-                    size={20}
-                    color={Colors[colorScheme].buttonPrimaryText}
-                  />
+                  {isSaving ? (
+                    <ActivityIndicator
+                      size="small"
+                      color={Colors[colorScheme].buttonPrimaryText}
+                    />
+                  ) : (
+                    <>
+                      <MaterialIcons
+                        name="check"
+                        size={20}
+                        color={Colors[colorScheme].buttonPrimaryText}
+                      />
+                      <ThemedText
+                        style={[
+                          styles.actionButtonText,
+                          { color: Colors[colorScheme].buttonPrimaryText },
+                        ]}
+                      >
+                        {t("common.save")}
+                      </ThemedText>
+                    </>
+                  )}
                 </TouchableOpacity>
               </View>
             </>
@@ -218,7 +329,6 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    alignItems: "center",
     paddingHorizontal: 24,
     paddingTop: 48,
     paddingBottom: 32,
@@ -240,8 +350,7 @@ const styles = StyleSheet.create({
   },
   waveformContainer: {
     width: "100%",
-    flex: 1,
-    minHeight: 200,
+    height: 120,
     marginBottom: 48,
     justifyContent: "center",
   },
@@ -258,11 +367,42 @@ const styles = StyleSheet.create({
     width: "100%",
     marginBottom: 24,
   },
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    marginBottom: 8,
+  },
+  titleInput: {
+    height: 48,
+    borderRadius: 12,
+    borderWidth: 1,
+    paddingHorizontal: 16,
+    fontSize: 16,
+    marginBottom: 24,
+  },
+  transcriptContainer: {
+    minHeight: 120,
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 16,
+    marginBottom: 24,
+  },
+  loadingContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 12,
+  },
+  loadingText: {
+    fontSize: 14,
+  },
+  transcriptText: {
+    fontSize: 16,
+    lineHeight: 24,
+  },
   actionButtonsContainer: {
     flexDirection: "row",
     gap: 16,
     width: "100%",
-    paddingHorizontal: 16,
   },
   actionButton: {
     flex: 1,
@@ -277,7 +417,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: "transparent",
   },
-  nextButton: {
+  saveButton: {
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,

@@ -64,7 +64,7 @@ export interface UseAudioPlaybackReturn {
   /** Error message if any */
   error: string | null;
   /** Start or resume playback */
-  play: () => void;
+  play: () => Promise<void>;
   /** Pause playback */
   pause: () => void;
   /** Toggle play/pause */

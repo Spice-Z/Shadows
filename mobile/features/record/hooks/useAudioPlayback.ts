@@ -1,10 +1,23 @@
 import { useCallback, useEffect, useState } from "react";
-import { useAudioPlayer, useAudioPlayerStatus } from "expo-audio";
+import {
+  useAudioPlayer,
+  useAudioPlayerStatus,
+  setAudioModeAsync,
+} from "expo-audio";
 import type {
   PlaybackState,
   UseAudioPlaybackOptions,
   UseAudioPlaybackReturn,
 } from "../types";
+
+async function configurePlaybackMode() {
+  await setAudioModeAsync({
+    playsInSilentMode: true,
+    allowsRecording: false,
+    // only Android
+    shouldRouteThroughEarpiece: false,
+  });
+}
 
 export function useAudioPlayback(
   uri: string | null,
@@ -18,7 +31,12 @@ export function useAudioPlayback(
   const player = useAudioPlayer(uri ? { uri } : null);
   const status = useAudioPlayerStatus(player);
 
-  // Sync state with player status
+  useEffect(() => {
+    if (uri) {
+      configurePlaybackMode();
+    }
+  }, [uri]);
+
   useEffect(() => {
     if (!uri) {
       setState("idle");
@@ -27,7 +45,10 @@ export function useAudioPlayback(
 
     if (status.playing) {
       setState("playing");
-    } else if (status.currentTime > 0 && status.currentTime >= status.duration) {
+    } else if (
+      status.currentTime > 0 &&
+      status.currentTime >= status.duration
+    ) {
       setState("ended");
       onPlaybackComplete?.();
     } else if (status.currentTime > 0) {
@@ -35,11 +56,18 @@ export function useAudioPlayback(
     } else {
       setState("idle");
     }
-  }, [uri, status.playing, status.currentTime, status.duration, onPlaybackComplete]);
+  }, [
+    uri,
+    status.playing,
+    status.currentTime,
+    status.duration,
+    onPlaybackComplete,
+  ]);
 
-  const play = useCallback(() => {
+  const play = useCallback(async () => {
     try {
       setError(null);
+      await configurePlaybackMode();
       if (status.currentTime >= status.duration && status.duration > 0) {
         // If at the end, seek to beginning first
         player.seekTo(0);
@@ -91,7 +119,7 @@ export function useAudioPlayback(
       player.seekTo(0);
       player.pause();
       setState("idle");
-    } catch (err) {
+    } catch {
       // Ignore reset errors
     }
   }, [player]);
@@ -115,4 +143,3 @@ export function useAudioPlayback(
     reset,
   };
 }
-
